@@ -121,11 +121,11 @@ Disponer de un proyecto backend que:
 
 ## 5. Criterios de aceptación (Definition of Done)
 
-- [ ] El proyecto backend compila sin errores.  
-- [ ] La aplicación arranca correctamente en local.  
-- [ ] Existe un endpoint `GET /api/health` que responde `200 OK` con un cuerpo JSON.  
-- [ ] La estructura de paquetes respeta la arquitectura definida en `10-arquitectura-capas.md`.  
-- [ ] Se realizó al menos un commit asociado a esta tarea con un mensaje similar a:
+- [X] El proyecto backend compila sin errores.  
+- [X] La aplicación arranca correctamente en local.  
+- [X] Existe un endpoint `GET /api/health` que responde `200 OK` con un cuerpo JSON.  
+- [X] La estructura de paquetes respeta la arquitectura definida en `10-arquitectura-capas.md`.  
+- [X] Se realizó al menos un commit asociado a esta tarea con un mensaje similar a:
 
   - `chore: crear proyecto backend y estructura de capas base`
 
