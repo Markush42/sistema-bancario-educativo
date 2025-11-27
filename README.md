@@ -32,10 +32,10 @@ Toda la documentación se encuentra en la carpeta `docs/`:
 
 ## Estado actual
 
-- [x] Documentación en diseño.
-- [ ] Modelo de dominio detallado.
-- [ ] Arquitectura completa.
-- [ ] Implementación técnica.
+- [X] Documentación en diseño.
+- [X] Modelo de dominio detallado.
+- [X] Arquitectura completa.
+- [X] Implementación técnica.
 
 ## Próximos pasos
 
