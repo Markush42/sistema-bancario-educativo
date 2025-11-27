@@ -62,60 +62,60 @@ Disponer de un proyecto backend que:
 
 ## 4. Tareas
 
-- [ ] Crear el proyecto backend (por ejemplo, usando Spring Initializr) con:
-  - [ ] Java (versión definida para el proyecto).  
-  - [ ] Maven como herramienta de build.  
-  - [ ] Dependencias mínimas:
-    - [ ] `spring-boot-starter-web`
-    - [ ] (Opcional) `spring-boot-starter-data-jpa` si se quiere dejar preconfigurado.
+- [X] Crear el proyecto backend (por ejemplo, usando Spring Initializr) con:
+  - [X] Java (versión definida para el proyecto).  
+  - [x] Maven como herramienta de build.  
+  - [X] Dependencias mínimas:
+    - [X] `spring-boot-starter-web`
+    - [X] (Opcional) `spring-boot-starter-data-jpa` si se quiere dejar preconfigurado.
 
-- [ ] Definir el **paquete base** del proyecto (ejemplo: `com.bancoeducativo`).
+- [X] Definir el **paquete base** del proyecto (ejemplo: `com.bancoeducativo`).
 
-- [ ] Crear los paquetes por **capas** en el código fuente:
+- [X] Crear los paquetes por **capas** en el código fuente:
 
-  - [ ] `com.bancoeducativo.presentation`  
-  - [ ] `com.bancoeducativo.application`  
-  - [ ] `com.bancoeducativo.domain`  
-  - [ ] `com.bancoeducativo.infrastructure`  
+  - [X] `com.bancoeducativo.presentation`  
+  - [X] `com.bancoeducativo.application`  
+  - [X] `com.bancoeducativo.domain`  
+  - [X] `com.bancoeducativo.infrastructure`  
 
-- [ ] Crear subpaquetes por **módulos funcionales** donde aplique:
+- [X] Crear subpaquetes por **módulos funcionales** donde aplique:
 
-  - [ ] `com.bancoeducativo.presentation.empleados`  
-  - [ ] `com.bancoeducativo.presentation.clientes`  
-  - [ ] `com.bancoeducativo.presentation.cuentas`  
-  - [ ] `com.bancoeducativo.presentation.operaciones`  
+  - [X] `com.bancoeducativo.presentation.empleados`  
+  - [X] `com.bancoeducativo.presentation.clientes`  
+  - [X] `com.bancoeducativo.presentation.cuentas`  
+  - [X] `com.bancoeducativo.presentation.operaciones`  
 
-  - [ ] `com.bancoeducativo.application.empleados`  
-  - [ ] `com.bancoeducativo.application.clientes`  
-  - [ ] `com.bancoeducativo.application.cuentas`  
-  - [ ] `com.bancoeducativo.application.operaciones`  
+  - [X] `com.bancoeducativo.application.empleados`  
+  - [X] `com.bancoeducativo.application.clientes`  
+  - [X] `com.bancoeducativo.application.cuentas`  
+  - [X] `com.bancoeducativo.application.operaciones`  
 
-  - [ ] `com.bancoeducativo.domain.empleados`  
-  - [ ] `com.bancoeducativo.domain.clientes`  
-  - [ ] `com.bancoeducativo.domain.cuentas`  
-  - [ ] `com.bancoeducativo.domain.operaciones`  
-  - [ ] `com.bancoeducativo.domain.auditoria`  
+  - [X] `com.bancoeducativo.domain.empleados`  
+  - [X] `com.bancoeducativo.domain.clientes`  
+  - [X] `com.bancoeducativo.domain.cuentas`  
+  - [X] `com.bancoeducativo.domain.operaciones`  
+  - [X] `com.bancoeducativo.domain.auditoria`  
 
-  - [ ] `com.bancoeducativo.infrastructure.persistence`  
-  - [ ] `com.bancoeducativo.infrastructure.config`  
+  - [X] `com.bancoeducativo.infrastructure.persistence`  
+  - [X] `com.bancoeducativo.infrastructure.config`  
 
-- [ ] Añadir clases vacías / marcadores mínimos para cada capa (solo para que no queden paquetes vacíos):
+- [X] Añadir clases vacías / marcadores mínimos para cada capa (solo para que no queden paquetes vacíos):
 
-  - [ ] `com.bancoeducativo.presentation.HealthCheckController`  
-  - [ ] `com.bancoeducativo.application.ApplicationMarker`  
-  - [ ] `com.bancoeducativo.domain.DomainMarker`  
-  - [ ] `com.bancoeducativo.infrastructure.InfrastructureMarker`  
+  - [X] `com.bancoeducativo.presentation.HealthCheckController`  
+  - [X] `com.bancoeducativo.application.ApplicationMarker`  
+  - [X] `com.bancoeducativo.domain.DomainMarker`  
+  - [X] `com.bancoeducativo.infrastructure.InfrastructureMarker`  
 
-- [ ] Implementar un **endpoint mínimo de health-check**:
+- [X] Implementar un **endpoint mínimo de health-check**:
 
-  - [ ] `GET /api/health` que devuelva un JSON sencillo, por ejemplo:
+  - [X] `GET /api/health` que devuelva un JSON sencillo, por ejemplo:
 
         {
           "status": "UP",
           "app": "sistema-bancario-educativo"
         }
 
-- [ ] Verificar que la aplicación se ejecuta (por ejemplo, con `mvn spring-boot:run`) y que el endpoint `/api/health` responde `200 OK`.
+- [X] Verificar que la aplicación se ejecuta (por ejemplo, con `mvn spring-boot:run`) y que el endpoint `/api/health` responde `200 OK`.
 
 ---
 
