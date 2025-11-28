@@ -2,7 +2,6 @@ package com.app.banco.banco_educativo_api.presentation.clientes;
 
 import com.app.banco.banco_educativo_api.application.clientes.ClienteService;
 import com.app.banco.banco_educativo_api.application.clientes.dto.*;
-import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

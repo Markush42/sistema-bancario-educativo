@@ -29,9 +29,9 @@ public class ClienteMapperImpl implements ClienteMapper {
         Cliente cliente = new Cliente();
 
         // Campos básicos
-        cliente.setNombre(dto.getNombre());
-        cliente.setApellido(dto.getApellido());
-        cliente.setNumeroDocumento(dto.getDni());
+        cliente.setNombre(dto.nombre());
+        cliente.setApellido(dto.apellido());
+        cliente.setNumeroDocumento(dto.dni());
 
         // 🔹 Valores por defecto para el MVP:
         // Todos los clientes son personas físicas con DNI.
@@ -64,11 +64,12 @@ public class ClienteMapperImpl implements ClienteMapper {
             return null;
         }
 
-        ClienteResponseDto dto = new ClienteResponseDto();
-        dto.setId(entity.getId());
-        dto.setNombre(entity.getNombre());
-        dto.setApellido(entity.getApellido());
-        dto.setDni(entity.getNumeroDocumento());
+        ClienteResponseDto dto = new ClienteResponseDto(
+            entity.getId(),
+            entity.getNombre(),
+            entity.getApellido(),
+            entity.getNumeroDocumento()
+        );
         return dto;
     }
 
@@ -91,7 +92,6 @@ public class ClienteMapperImpl implements ClienteMapper {
             entity.getEstado()
         );
         
-        //System.out.println(dto.);
 
         return dto;
     }

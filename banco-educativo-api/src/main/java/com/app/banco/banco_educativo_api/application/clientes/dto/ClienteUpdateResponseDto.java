@@ -12,7 +12,7 @@ import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoPersona;
  */
 public record ClienteUpdateResponseDto(
 
-        Long id,                     // ID del cliente actualizado
+        Long id,
 
         TipoPersona tipoPersona,
 
