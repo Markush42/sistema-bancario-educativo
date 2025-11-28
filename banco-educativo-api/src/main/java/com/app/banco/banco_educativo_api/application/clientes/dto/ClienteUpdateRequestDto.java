@@ -6,12 +6,13 @@ import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoPersona;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record ClienteUpdateRequestDto(
 
-        @NotBlank
-        @Size(max = 20)
+        // Enums -> @NotNull (no @NotBlank ni @Size)
+        @NotNull
         TipoPersona tipoPersona,
 
         @NotBlank
@@ -22,8 +23,7 @@ public record ClienteUpdateRequestDto(
         @Size(max = 100)
         String apellido,
 
-        @NotBlank
-        @Size(max = 10)
+        @NotNull
         TipoDocumento tipoDocumento,
 
         @NotBlank
@@ -40,7 +40,6 @@ public record ClienteUpdateRequestDto(
         @Size(max = 255)
         String direccion,
 
-        @NotBlank
-        @Size(max = 20)
+        @NotNull
         EstadoCliente estado
 ) {}

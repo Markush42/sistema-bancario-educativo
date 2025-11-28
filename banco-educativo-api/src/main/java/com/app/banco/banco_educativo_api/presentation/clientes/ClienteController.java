@@ -39,10 +39,10 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-  @PutMapping("/{id}")
+   @PutMapping("/{id}")
     public ResponseEntity<ClienteResponseDto> actualizarCliente(
             @PathVariable Long id,
-            @Valid @RequestBody ClienteRequestDto requestDto
+            @Valid @RequestBody ClienteUpdateRequestDto requestDto
     ) {
         ClienteResponseDto response = clienteService.actualizarCliente(id, requestDto);
         return ResponseEntity.ok(response);

@@ -54,6 +54,8 @@ public class ClienteMapperImpl implements ClienteMapper {
     // el documento lo manejás aparte por el tema unicidad
 }
 
+
+
     
     @Override
     public ClienteResponseDto toResponseDto(Cliente entity) {

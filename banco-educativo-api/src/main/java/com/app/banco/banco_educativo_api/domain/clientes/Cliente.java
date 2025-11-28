@@ -24,7 +24,7 @@ public class Cliente {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_persona", nullable = false, length = 20)
+    @Column(name = "tipo_persona", nullable = false)
     private TipoPersona tipoPersona; // FISICA / JURIDICA
 
     @Column(name = "nombre", nullable = false, length = 80)
@@ -34,7 +34,7 @@ public class Cliente {
     private String apellido;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_documento", nullable = false, length = 20)
+    @Column(name = "tipo_documento", nullable = false)
     private TipoDocumento tipoDocumento;
 
     @Column(name = "numero_documento", nullable = false, length = 30)
@@ -50,7 +50,7 @@ public class Cliente {
     private String direccion;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado", nullable = false, length = 20)
+    @Column(name = "estado", nullable = false)
     private EstadoCliente estado; // ACTIVO / BLOQUEADO
 
     @Column(name = "fecha_alta", nullable = false)

@@ -87,58 +87,48 @@ public class ClienteService {
     }
 
     @Transactional
-    public ClienteResponseDto actualizarCliente(Long id, ClienteRequestDto requestDto) {
+public ClienteResponseDto actualizarCliente(Long id, ClienteUpdateRequestDto requestDto) {
 
-        // 1) Busco el cliente existente
-        Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(
-                        "Cliente no encontrado con id " + id
-                ));
+    // 1) Busco el cliente existente
+    Cliente cliente = clienteRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException(
+                    "Cliente no encontrado con id " + id
+            ));
 
-        // 2) Validación de documento duplicado (si aplica)
-        String nuevoNumeroDocumento = requestDto.getDni();   // según tu DTO
-        TipoDocumento tipoDocumento = TipoDocumento.DNI;     // MVP actual
+    // 2) Datos nuevos de documento que vienen en el DTO
+    String nuevoNumeroDocumento = requestDto.numeroDocumento();
+    TipoDocumento nuevoTipoDocumento = requestDto.tipoDocumento();
 
-        boolean cambioDocumento =
-                !cliente.getNumeroDocumento().equals(nuevoNumeroDocumento) ||
-                cliente.getTipoDocumento() != tipoDocumento;
+    // 3) Verifico si realmente cambió el documento
+    boolean cambioDocumento =
+            !cliente.getNumeroDocumento().equals(nuevoNumeroDocumento) ||
+            cliente.getTipoDocumento() != nuevoTipoDocumento;
 
-        if (cambioDocumento) {
-            boolean existe = clienteRepository
-                    .existsByTipoDocumentoAndNumeroDocumento(tipoDocumento, nuevoNumeroDocumento);
+    // 4) Si cambió, valido unicidad
+    if (cambioDocumento) {
+        boolean existe = clienteRepository
+                .existsByTipoDocumentoAndNumeroDocumento(nuevoTipoDocumento, nuevoNumeroDocumento);
 
-            if (existe) {
-                throw new DocumentoDuplicadoException(
-                        "Ya existe un cliente con documento " +
-                        tipoDocumento + " " + nuevoNumeroDocumento
-                );
-            }
+        if (existe) {
+            throw new DocumentoDuplicadoException(
+                    "Ya existe un cliente con documento " +
+                    nuevoTipoDocumento + " " + nuevoNumeroDocumento
+            );
         }
-
-        // 3) Mapear campos del DTO a la entidad existente
-        // Estas llamadas las ajustás a los getters reales de tu DTO y setters de tu entidad
-
-        cliente.setTipoDocumento(tipoDocumento);
-        cliente.setNumeroDocumento(nuevoNumeroDocumento);
-
-        // Ejemplos de otros campos que seguramente tengas:
-        // (cambiá los nombres según tus clases reales)
-
-        // cliente.setTipoPersona(requestDto.getTipoPersona());
-        // cliente.setNombre(requestDto.getNombre());
-        // cliente.setApellido(requestDto.getApellido());
-        // cliente.setEmail(requestDto.getEmail());
-        // cliente.setTelefono(requestDto.getTelefono());
-        // cliente.setDireccion(requestDto.getDireccion());
-        // cliente.setEstado(requestDto.getEstado());
-
-        // Si querés centralizar esto, podés crear un método en el mapper:
-        // clienteMapper.updateEntityFromDto(requestDto, cliente);
-
-        // 4) Persisto cambios
-        Cliente actualizado = clienteRepository.save(cliente);
-
-        // 5) Convierto a DTO de respuesta
-        return clienteMapper.toResponseDto(actualizado);
     }
+
+    // 5) Actualizo campos "simples" usando el mapper (sin tocar documento acá)
+    clienteMapper.updateEntityFromDto(requestDto, cliente);
+
+    // 6) Documento y tipoDocumento se actualizan explícitamente
+    cliente.setTipoDocumento(nuevoTipoDocumento);
+    cliente.setNumeroDocumento(nuevoNumeroDocumento);
+
+    // 7) Persisto cambios
+    Cliente actualizado = clienteRepository.save(cliente);
+
+    // 8) Devuelvo DTO de respuesta
+    return clienteMapper.toResponseDto(actualizado);
+}
+
 }
