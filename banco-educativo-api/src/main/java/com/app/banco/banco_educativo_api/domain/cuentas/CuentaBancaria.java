@@ -55,7 +55,7 @@ public class CuentaBancaria {
     // Constructores
     // ==========
 
-    protected CuentaBancaria() {
+    public CuentaBancaria() {
         // Requerido por JPA
     }
 

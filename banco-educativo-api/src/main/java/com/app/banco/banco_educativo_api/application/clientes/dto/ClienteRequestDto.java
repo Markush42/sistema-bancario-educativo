@@ -1,4 +1,4 @@
-package com.app.banco.banco_educativo_api.application.dto;
+package com.app.banco.banco_educativo_api.application.clientes.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

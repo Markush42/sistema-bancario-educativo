@@ -1,0 +1,69 @@
+package com.app.banco.banco_educativo_api.application.clientes.mapper;
+
+import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteRequestDto;
+import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
+import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
+import com.app.banco.banco_educativo_api.domain.clientes.TipoDocumento;
+import com.app.banco.banco_educativo_api.domain.clientes.TipoPersona;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Implementación manual de ClienteMapper.
+ * Se encarga de convertir entre DTOs y la entidad Cliente.
+ */
+@Component
+public class ClienteMapperImpl implements ClienteMapper {
+
+    @Override
+    public Cliente toEntity(ClienteRequestDto dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        Cliente cliente = new Cliente();
+
+        // Campos básicos
+        cliente.setNombre(dto.getNombre());
+        cliente.setApellido(dto.getApellido());
+        cliente.setNumeroDocumento(dto.getDni());
+
+        // 🔹 Valores por defecto para el MVP:
+        // Todos los clientes son personas físicas con DNI.
+        cliente.setTipoPersona(TipoPersona.FISICA);
+        cliente.setTipoDocumento(TipoDocumento.DNI);
+
+        // email, telefono, direccion quedan null (opcionales)
+        // estado y fechaAlta se setean en @PrePersist
+
+        return cliente;
+    }
+
+    @Override
+    public ClienteResponseDto toResponseDto(Cliente entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        ClienteResponseDto dto = new ClienteResponseDto();
+        dto.setId(entity.getId());
+        dto.setNombre(entity.getNombre());
+        dto.setApellido(entity.getApellido());
+        dto.setDni(entity.getNumeroDocumento());
+        return dto;
+    }
+
+    @Override
+    public List<ClienteResponseDto> toResponseDtoList(List<Cliente> entities) {
+        if (entities == null) {
+            return null;
+        }
+        List<ClienteResponseDto> list = new ArrayList<>(entities.size());
+        for (Cliente c : entities) {
+            list.add(toResponseDto(c));
+        }
+        return list;
+    }
+}

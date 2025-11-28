@@ -1,4 +1,4 @@
-package com.app.banco.banco_educativo_api.application.dto;
+package com.app.banco.banco_educativo_api.application.clientes.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

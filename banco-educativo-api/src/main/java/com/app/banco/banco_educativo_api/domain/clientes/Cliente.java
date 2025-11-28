@@ -56,7 +56,7 @@ public class Cliente {
     // Constructores
     // ==========
 
-    protected Cliente() {
+    public Cliente() {
         // Requerido por JPA
     }
 
