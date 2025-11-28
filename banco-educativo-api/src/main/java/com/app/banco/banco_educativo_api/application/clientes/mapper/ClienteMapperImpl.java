@@ -3,6 +3,7 @@ package com.app.banco.banco_educativo_api.application.clientes.mapper;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteRequestDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateRequestDto;
+import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateResponseDto;
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
 import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoDocumento;
 import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoPersona;
@@ -68,6 +69,30 @@ public class ClienteMapperImpl implements ClienteMapper {
         dto.setNombre(entity.getNombre());
         dto.setApellido(entity.getApellido());
         dto.setDni(entity.getNumeroDocumento());
+        return dto;
+    }
+
+    @Override
+    public ClienteUpdateResponseDto toResponseUpdateDto(Cliente entity) {
+        if (entity == null) {
+            return null;
+        }
+
+        ClienteUpdateResponseDto dto = new ClienteUpdateResponseDto(
+            entity.getId(),
+            entity.getTipoPersona(),
+            entity.getNombre(),
+            entity.getApellido(),
+            entity.getTipoDocumento(),
+            entity.getNumeroDocumento(),
+            entity.getEmail(),
+            entity.getTelefono(),
+            entity.getDireccion(),
+            entity.getEstado()
+        );
+        
+        //System.out.println(dto.);
+
         return dto;
     }
 

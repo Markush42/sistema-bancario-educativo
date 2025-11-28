@@ -3,6 +3,7 @@ package com.app.banco.banco_educativo_api.application.clientes.mapper;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteRequestDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateRequestDto;
+import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateResponseDto;
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
 import java.util.List;
 
@@ -11,6 +12,8 @@ public interface ClienteMapper { // el ID se genera automáticamente
     Cliente toEntity(ClienteRequestDto dto);
 
     ClienteResponseDto toResponseDto(Cliente entity);
+
+    ClienteUpdateResponseDto toResponseUpdateDto(Cliente entity);
 
     List<ClienteResponseDto> toResponseDtoList(List<Cliente> entities);
 

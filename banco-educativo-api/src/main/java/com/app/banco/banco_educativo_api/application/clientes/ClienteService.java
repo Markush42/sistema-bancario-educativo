@@ -3,6 +3,7 @@ package com.app.banco.banco_educativo_api.application.clientes;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteRequestDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateRequestDto;
+import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.exceptions.DocumentoDuplicadoException;
 import com.app.banco.banco_educativo_api.application.clientes.mapper.ClienteMapper;
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
@@ -86,8 +87,8 @@ public class ClienteService {
         clienteRepository.deleteById(id);
     }
 
-    @Transactional
-public ClienteResponseDto actualizarCliente(Long id, ClienteUpdateRequestDto requestDto) {
+@Transactional
+public ClienteUpdateResponseDto actualizarCliente(Long id, ClienteUpdateRequestDto requestDto) {
 
     // 1) Busco el cliente existente
     Cliente cliente = clienteRepository.findById(id)
@@ -128,7 +129,7 @@ public ClienteResponseDto actualizarCliente(Long id, ClienteUpdateRequestDto req
     Cliente actualizado = clienteRepository.save(cliente);
 
     // 8) Devuelvo DTO de respuesta
-    return clienteMapper.toResponseDto(actualizado);
+    return clienteMapper.toResponseUpdateDto(actualizado);
 }
 
 }

@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * DTO de entrada para crear un nuevo Cliente.
- */
+    Más adelante transformarla en un record 28/11/25
+*/
+
 @Data
 @NoArgsConstructor
 public class ClienteRequestDto {

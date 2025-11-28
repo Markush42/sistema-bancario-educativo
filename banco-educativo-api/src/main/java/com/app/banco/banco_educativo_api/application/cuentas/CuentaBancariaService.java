@@ -75,4 +75,9 @@ public class CuentaBancariaService {
         }
         cuentaBancariaRepository.deleteById(id);
     }
+
+
+    //Falta agregar el método PUT, y actuar en las capas que correspondan(dto,controller,services-application(aqui))
+
+
 }
