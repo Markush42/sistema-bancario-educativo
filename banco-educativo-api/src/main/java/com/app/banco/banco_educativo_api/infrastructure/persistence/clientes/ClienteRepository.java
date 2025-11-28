@@ -1,7 +1,8 @@
 package com.app.banco.banco_educativo_api.infrastructure.persistence.clientes;
 
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
-import com.app.banco.banco_educativo_api.domain.clientes.TipoDocumento;
+import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoDocumento;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

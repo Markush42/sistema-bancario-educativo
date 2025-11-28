@@ -2,9 +2,11 @@ package com.app.banco.banco_educativo_api.application.clientes.mapper;
 
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteRequestDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
+import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateRequestDto;
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
-import com.app.banco.banco_educativo_api.domain.clientes.TipoDocumento;
-import com.app.banco.banco_educativo_api.domain.clientes.TipoPersona;
+import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoDocumento;
+import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoPersona;
+
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,6 +43,18 @@ public class ClienteMapperImpl implements ClienteMapper {
         return cliente;
     }
 
+    public void updateEntityFromDto(ClienteUpdateRequestDto dto, Cliente entity) {
+    entity.setTipoPersona(dto.tipoPersona());
+    entity.setNombre(dto.nombre());
+    entity.setApellido(dto.apellido());
+    entity.setEmail(dto.email());
+    entity.setTelefono(dto.telefono());
+    entity.setDireccion(dto.direccion());
+    entity.setEstado(dto.estado());
+    // el documento lo manejás aparte por el tema unicidad
+}
+
+    
     @Override
     public ClienteResponseDto toResponseDto(Cliente entity) {
         if (entity == null) {
@@ -66,4 +80,6 @@ public class ClienteMapperImpl implements ClienteMapper {
         }
         return list;
     }
+
+    
 }

@@ -1,6 +1,10 @@
 package com.app.banco.banco_educativo_api.domain.cuentas;
 
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
+import com.app.banco.banco_educativo_api.domain.cuentas.enums.EstadoCuenta;
+import com.app.banco.banco_educativo_api.domain.cuentas.enums.Moneda;
+import com.app.banco.banco_educativo_api.domain.cuentas.enums.TipoCuenta;
+
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

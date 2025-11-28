@@ -3,6 +3,10 @@ package com.app.banco.banco_educativo_api.domain.clientes;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.app.banco.banco_educativo_api.domain.clientes.enums.EstadoCliente;
+import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoDocumento;
+import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoPersona;
+
 @Entity
 @Table(
     name = "clientes",

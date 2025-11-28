@@ -39,6 +39,15 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+  @PutMapping("/{id}")
+    public ResponseEntity<ClienteResponseDto> actualizarCliente(
+            @PathVariable Long id,
+            @Valid @RequestBody ClienteRequestDto requestDto
+    ) {
+        ClienteResponseDto response = clienteService.actualizarCliente(id, requestDto);
+        return ResponseEntity.ok(response);
+    }
+
     /**
      * Obtener cliente por ID.
      *

@@ -1,4 +1,4 @@
-package com.app.banco.banco_educativo_api.domain.clientes;
+package com.app.banco.banco_educativo_api.domain.clientes.enums;
 
 public enum TipoDocumento {
     DNI,
