@@ -61,16 +61,6 @@ public class ClienteController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Listar todos los clientes.
-     *
-     * GET /api/clientes
-     */
-    @GetMapping
-    public ResponseEntity<List<ClienteResponseDto>> listarClientes() {
-        List<ClienteResponseDto> clientes = clienteService.listarTodosLosClientes();
-        return ResponseEntity.ok(clientes);
-    }
 
     /**
      * Eliminar cliente por ID.
