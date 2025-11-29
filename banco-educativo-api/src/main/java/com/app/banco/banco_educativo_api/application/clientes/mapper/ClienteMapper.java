@@ -7,6 +7,8 @@ import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateR
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 
 public interface ClienteMapper { // el ID se genera automáticamente
     Cliente toEntity(ClienteRequestDto dto);
@@ -18,4 +20,8 @@ public interface ClienteMapper { // el ID se genera automáticamente
     List<ClienteResponseDto> toResponseDtoList(List<Cliente> entities);
 
     void updateEntityFromDto(ClienteUpdateRequestDto dto, Cliente entity);
+
+    List<ClienteUpdateResponseDto> toResponseUpdateDtoList(List<Cliente> entities);
+    
+    Page<ClienteResponseDto> toResponseDtoPage(Page<Cliente> page);
 }

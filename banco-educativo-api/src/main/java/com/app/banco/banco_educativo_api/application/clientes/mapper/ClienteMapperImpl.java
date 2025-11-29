@@ -8,6 +8,7 @@ import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
 import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoDocumento;
 import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoPersona;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ import java.util.List;
 @Component
 public class ClienteMapperImpl implements ClienteMapper {
 
+    private static final TipoPersona DEFAULT_TIPO_PERSONA = TipoPersona.FISICA;
+    private static final TipoDocumento DEFAULT_TIPO_DOCUMENTO = TipoDocumento.DNI;
+
     @Override
     public Cliente toEntity(ClienteRequestDto dto) {
         if (dto == null) {
@@ -28,32 +32,48 @@ public class ClienteMapperImpl implements ClienteMapper {
 
         Cliente cliente = new Cliente();
 
-        // Campos básicos
         cliente.setNombre(dto.nombre());
         cliente.setApellido(dto.apellido());
         cliente.setNumeroDocumento(dto.dni());
 
-        // 🔹 Valores por defecto para el MVP:
-        // Todos los clientes son personas físicas con DNI.
-        cliente.setTipoPersona(TipoPersona.FISICA);
-        cliente.setTipoDocumento(TipoDocumento.DNI);
-
-        // email, telefono, direccion quedan null (opcionales)
-        // estado y fechaAlta se setean en @PrePersist
+        // Defaults controlados por constantes
+        cliente.setTipoPersona(DEFAULT_TIPO_PERSONA);
+        cliente.setTipoDocumento(DEFAULT_TIPO_DOCUMENTO);
 
         return cliente;
     }
 
+    @Override
     public void updateEntityFromDto(ClienteUpdateRequestDto dto, Cliente entity) {
-    entity.setTipoPersona(dto.tipoPersona());
-    entity.setNombre(dto.nombre());
-    entity.setApellido(dto.apellido());
-    entity.setEmail(dto.email());
-    entity.setTelefono(dto.telefono());
-    entity.setDireccion(dto.direccion());
-    entity.setEstado(dto.estado());
-    // el documento lo manejás aparte por el tema unicidad
-}
+        if (dto == null || entity == null) {
+            return;
+        }
+
+        // Solo actualizo si viene un valor no null en el DTO
+        if (dto.tipoPersona() != null) {
+            entity.setTipoPersona(dto.tipoPersona());
+        }
+        if (dto.nombre() != null) {
+            entity.setNombre(dto.nombre());
+        }
+        if (dto.apellido() != null) {
+            entity.setApellido(dto.apellido());
+        }
+        if (dto.email() != null) {
+            entity.setEmail(dto.email());
+        }
+        if (dto.telefono() != null) {
+            entity.setTelefono(dto.telefono());
+        }
+        if (dto.direccion() != null) {
+            entity.setDireccion(dto.direccion());
+        }
+        if (dto.estado() != null) {
+            entity.setEstado(dto.estado());
+        }
+    
+    }
+
 
 
 
@@ -106,6 +126,26 @@ public class ClienteMapperImpl implements ClienteMapper {
             list.add(toResponseDto(c));
         }
         return list;
+    }
+
+
+    @Override
+    public List<ClienteUpdateResponseDto> toResponseUpdateDtoList(List<Cliente> entities) {
+    if (entities == null) {
+        return null;
+    }
+    List<ClienteUpdateResponseDto> list = new ArrayList<>(entities.size());
+    for (Cliente c : entities) {
+        list.add(toResponseUpdateDto(c));
+    }
+    return list;
+}
+
+    public Page<ClienteResponseDto> toResponseDtoPage(Page<Cliente> page) {
+    if (page == null) {
+        return Page.empty();
+    }
+    return page.map(this::toResponseDto);
     }
 
     

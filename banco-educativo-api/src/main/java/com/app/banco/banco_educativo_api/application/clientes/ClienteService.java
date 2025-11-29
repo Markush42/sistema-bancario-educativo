@@ -9,6 +9,9 @@ import com.app.banco.banco_educativo_api.application.clientes.mapper.ClienteMapp
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
 import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoDocumento;
 import com.app.banco.banco_educativo_api.infrastructure.persistence.clientes.ClienteRepository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,7 +99,7 @@ public class ClienteService {
      * Actualizar un cliente existente.
      */
     @Transactional
-    public ClienteUpdateResponseDto actualizarCliente(Long id, ClienteUpdateRequestDto requestDto) 
+    public ClienteUpdateResponseDto actualizarCliente(Long id, ClienteUpdateRequestDto requestDto)
     {
 
         // 1) Busco el cliente existente
@@ -140,4 +143,13 @@ public class ClienteService {
         // 8) Devuelvo DTO de respuesta (record)
         return clienteMapper.toResponseUpdateDto(actualizado);
     }
+
+
+    @Transactional(readOnly = true)
+    public Page<ClienteResponseDto> listarClientes(Pageable pageable) {
+        Page<Cliente> page = clienteRepository.findAll(pageable); // JpaRepository ya lo trae
+        return clienteMapper.toResponseDtoPage(page);
+    }
+
+
 }

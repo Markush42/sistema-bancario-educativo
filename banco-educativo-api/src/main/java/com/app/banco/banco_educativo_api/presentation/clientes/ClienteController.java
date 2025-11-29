@@ -5,6 +5,9 @@ import com.app.banco.banco_educativo_api.application.clientes.dto.*;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -79,5 +82,11 @@ public class ClienteController {
         clienteService.eliminarClientePorId(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    @GetMapping
+    public Page<ClienteResponseDto> listarClientes(Pageable pageable) {
+        return clienteService.listarClientes(pageable);
+}
 }
 
