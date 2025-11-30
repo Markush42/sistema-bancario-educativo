@@ -3,7 +3,7 @@ package com.app.banco.banco_educativo_api.application.clientes;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteRequestDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateRequestDto;
-import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateResponseDto;
+import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.exceptions.DocumentoDuplicadoException;
 import com.app.banco.banco_educativo_api.application.clientes.mapper.ClienteMapper;
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
@@ -27,8 +27,7 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
 
-    public ClienteService(ClienteRepository clienteRepository,ClienteMapper clienteMapper) 
-    {
+    public ClienteService(ClienteRepository clienteRepository, ClienteMapper clienteMapper) {
         this.clienteRepository = clienteRepository;
         this.clienteMapper = clienteMapper;
     }
@@ -38,8 +37,7 @@ public class ClienteService {
      * En el MVP actual todos los tipos de documento se hardcodean a DNI.
      */
     @Transactional
-    public ClienteResponseDto crearCliente(ClienteRequestDto requestDto) 
-    {
+    public ClienteResponseDto crearCliente(ClienteRequestDto requestDto) {
 
         // 1) Datos clave para la unicidad
         String numeroDocumento = requestDto.dni();
@@ -52,8 +50,7 @@ public class ClienteService {
         if (existe) {
             throw new DocumentoDuplicadoException(
                     "Ya existe un cliente con documento " +
-                    tipoDocumento + " " + numeroDocumento
-            );
+                            tipoDocumento + " " + numeroDocumento);
         }
 
         // 3) Mapear DTO -> Entidad (mapper adaptado a records)
@@ -99,22 +96,19 @@ public class ClienteService {
      * Actualizar un cliente existente.
      */
     @Transactional
-    public ClienteUpdateResponseDto actualizarCliente(Long id, ClienteUpdateRequestDto requestDto)
-    {
+    public ClienteResponseDto actualizarCliente(Long id, ClienteUpdateRequestDto requestDto) {
 
         // 1) Busco el cliente existente
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException(
-                        "Cliente no encontrado con id " + id
-                ));
+                        "Cliente no encontrado con id " + id));
 
         // 2) Datos nuevos de documento que vienen en el DTO (record)
-        String nuevoNumeroDocumento = requestDto.numeroDocumento();  // record accessor
+        String nuevoNumeroDocumento = requestDto.numeroDocumento(); // record accessor
         TipoDocumento nuevoTipoDocumento = requestDto.tipoDocumento(); // record accessor
 
         // 3) Verifico si realmente cambió el documento
-        boolean cambioDocumento =
-                !cliente.getNumeroDocumento().equals(nuevoNumeroDocumento) ||
+        boolean cambioDocumento = !cliente.getNumeroDocumento().equals(nuevoNumeroDocumento) ||
                 cliente.getTipoDocumento() != nuevoTipoDocumento;
 
         // 4) Si cambió, valido unicidad
@@ -125,8 +119,7 @@ public class ClienteService {
             if (existe) {
                 throw new DocumentoDuplicadoException(
                         "Ya existe un cliente con documento " +
-                        nuevoTipoDocumento + " " + nuevoNumeroDocumento
-                );
+                                nuevoTipoDocumento + " " + nuevoNumeroDocumento);
             }
         }
 
@@ -141,15 +134,13 @@ public class ClienteService {
         Cliente actualizado = clienteRepository.save(cliente);
 
         // 8) Devuelvo DTO de respuesta (record)
-        return clienteMapper.toResponseUpdateDto(actualizado);
+        return clienteMapper.toResponseDto(actualizado);
     }
-
 
     @Transactional(readOnly = true)
     public Page<ClienteResponseDto> listarClientes(Pageable pageable) {
         Page<Cliente> page = clienteRepository.findAll(pageable); // JpaRepository ya lo trae
         return clienteMapper.toResponseDtoPage(page);
     }
-
 
 }

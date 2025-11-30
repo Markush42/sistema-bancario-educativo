@@ -3,7 +3,7 @@ package com.app.banco.banco_educativo_api.application.clientes.mapper;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteRequestDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateRequestDto;
-import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateResponseDto;
+import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
 import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoDocumento;
 import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoPersona;
@@ -71,13 +71,9 @@ public class ClienteMapperImpl implements ClienteMapper {
         if (dto.estado() != null) {
             entity.setEstado(dto.estado());
         }
-    
+
     }
 
-
-
-
-    
     @Override
     public ClienteResponseDto toResponseDto(Cliente entity) {
         if (entity == null) {
@@ -85,33 +81,16 @@ public class ClienteMapperImpl implements ClienteMapper {
         }
 
         ClienteResponseDto dto = new ClienteResponseDto(
-            entity.getId(),
-            entity.getNombre(),
-            entity.getApellido(),
-            entity.getNumeroDocumento()
-        );
-        return dto;
-    }
-
-    @Override
-    public ClienteUpdateResponseDto toResponseUpdateDto(Cliente entity) {
-        if (entity == null) {
-            return null;
-        }
-
-        ClienteUpdateResponseDto dto = new ClienteUpdateResponseDto(
-            entity.getId(),
-            entity.getTipoPersona(),
-            entity.getNombre(),
-            entity.getApellido(),
-            entity.getTipoDocumento(),
-            entity.getNumeroDocumento(),
-            entity.getEmail(),
-            entity.getTelefono(),
-            entity.getDireccion(),
-            entity.getEstado()
-        );
-        
+                entity.getId(),
+                entity.getTipoPersona(),
+                entity.getNombre(),
+                entity.getApellido(),
+                entity.getTipoDocumento(),
+                entity.getNumeroDocumento(),
+                entity.getEmail(),
+                entity.getTelefono(),
+                entity.getDireccion(),
+                entity.getEstado());
 
         return dto;
     }
@@ -128,25 +107,23 @@ public class ClienteMapperImpl implements ClienteMapper {
         return list;
     }
 
-
     @Override
-    public List<ClienteUpdateResponseDto> toResponseUpdateDtoList(List<Cliente> entities) {
-    if (entities == null) {
-        return null;
+    public List<ClienteResponseDto> toResponseUpdateDtoList(List<Cliente> entities) {
+        if (entities == null) {
+            return null;
+        }
+        List<ClienteResponseDto> list = new ArrayList<>(entities.size());
+        for (Cliente c : entities) {
+            list.add(toResponseDto(c));
+        }
+        return list;
     }
-    List<ClienteUpdateResponseDto> list = new ArrayList<>(entities.size());
-    for (Cliente c : entities) {
-        list.add(toResponseUpdateDto(c));
-    }
-    return list;
-}
 
     public Page<ClienteResponseDto> toResponseDtoPage(Page<Cliente> page) {
-    if (page == null) {
-        return Page.empty();
-    }
-    return page.map(this::toResponseDto);
+        if (page == null) {
+            return Page.empty();
+        }
+        return page.map(this::toResponseDto);
     }
 
-    
 }
