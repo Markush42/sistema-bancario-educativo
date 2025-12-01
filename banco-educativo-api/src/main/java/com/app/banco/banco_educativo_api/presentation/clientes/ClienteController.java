@@ -34,19 +34,17 @@ public class ClienteController {
      */
     @PostMapping
     public ResponseEntity<ClienteResponseDto> crearCliente(
-            @Valid @RequestBody ClienteRequestDto requestDto
-    ) {
+            @Valid @RequestBody ClienteRequestDto requestDto) {
 
         ClienteResponseDto response = clienteService.crearCliente(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteUpdateResponseDto> actualizarCliente(
+    public ResponseEntity<ClienteResponseDto> actualizarCliente(
             @PathVariable Long id,
-            @Valid @RequestBody ClienteUpdateRequestDto requestDto
-    ) {
-        ClienteUpdateResponseDto response = clienteService.actualizarCliente(id, requestDto);
+            @Valid @RequestBody ClienteUpdateRequestDto requestDto) {
+        ClienteResponseDto response = clienteService.actualizarCliente(id, requestDto);
         return ResponseEntity.ok(response);
     }
 
@@ -61,6 +59,16 @@ public class ClienteController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Bloquear cliente.
+     * 
+     * POST /api/clientes/{id}/bloquear
+     */
+    @PostMapping("/{id}/bloquear")
+    public ResponseEntity<BloqueoClienteResponseDto> bloquearCliente(@PathVariable Long id) {
+        BloqueoClienteResponseDto response = clienteService.bloquearCliente(id);
+        return ResponseEntity.ok(response);
+    }
 
     /**
      * Eliminar cliente por ID.
@@ -73,10 +81,8 @@ public class ClienteController {
         return ResponseEntity.noContent().build();
     }
 
-
     @GetMapping
     public Page<ClienteResponseDto> listarClientes(Pageable pageable) {
         return clienteService.listarClientes(pageable);
+    }
 }
-}
-

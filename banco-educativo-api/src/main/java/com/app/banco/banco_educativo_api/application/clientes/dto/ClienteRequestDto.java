@@ -5,20 +5,10 @@ import jakarta.validation.constraints.Size;
 
 /**
  * DTO de entrada para crear un nuevo Cliente.
- * Implementado como record (28/11/25).
+ * 
  */
 public record ClienteRequestDto(
-
-        @NotNull
-        @Size(min = 1, max = 50)
-        String nombre,
-
-        @NotNull
-        @Size(min = 1, max = 50)
-        String apellido,
-
-        @NotNull
-        @Size(min = 7, max = 8)
-        String dni
-) {
+                @NotNull @Size(min = 1, max = 50) String nombre,
+                @NotNull @Size(min = 1, max = 50) String apellido,
+                @NotNull @Size(min = 7, max = 8) String dni) {
 }

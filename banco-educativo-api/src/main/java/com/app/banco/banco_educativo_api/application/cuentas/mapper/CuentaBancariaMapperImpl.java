@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Implementación manual del mapper de CuentaBancaria.
@@ -24,9 +25,20 @@ public class CuentaBancariaMapperImpl implements CuentaBancariaMapper {
             return null;
         }
         CuentaBancaria cuenta = new CuentaBancaria();
-        // asumimos que la entidad tiene setSaldoActual(BigDecimal)
+
+        // Mapear campos del DTO
         cuenta.setSaldoActual(dto.getSaldo());
-        // el cliente se asigna en el service (porque hay que buscarlo en el repo)
+        cuenta.setTipoCuenta(dto.getTipoCuenta());
+        cuenta.setMoneda(dto.getMoneda());
+
+        // Generar número de cuenta único (simplificado para MVP)
+        // Formato: 6 dígitos aleatorios + "-" + timestamp corto
+        String numeroCuenta = String.format("%06d-%d",
+                (int) (Math.random() * 1000000),
+                System.currentTimeMillis() % 1000000);
+        cuenta.setNumeroCuenta(numeroCuenta);
+
+        // El cliente se asigna en el service (porque hay que buscarlo en el repo)
         return cuenta;
     }
 
@@ -42,8 +54,7 @@ public class CuentaBancariaMapperImpl implements CuentaBancariaMapper {
         return new CuentaBancariaResponseDto(
                 entity.getId(),
                 entity.getSaldoActual(),
-                clienteId
-        );
+                clienteId);
     }
 
     @Override
@@ -57,6 +68,5 @@ public class CuentaBancariaMapperImpl implements CuentaBancariaMapper {
         }
         return list;
     }
-
 
 }

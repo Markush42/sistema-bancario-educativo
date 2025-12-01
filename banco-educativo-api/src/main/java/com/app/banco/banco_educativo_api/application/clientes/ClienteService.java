@@ -1,12 +1,13 @@
 package com.app.banco.banco_educativo_api.application.clientes;
 
+import com.app.banco.banco_educativo_api.application.clientes.dto.BloqueoClienteResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteRequestDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateRequestDto;
-import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.exceptions.DocumentoDuplicadoException;
 import com.app.banco.banco_educativo_api.application.clientes.mapper.ClienteMapper;
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
+import com.app.banco.banco_educativo_api.domain.clientes.enums.EstadoCliente;
 import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoDocumento;
 import com.app.banco.banco_educativo_api.infrastructure.persistence.clientes.ClienteRepository;
 
@@ -141,6 +142,30 @@ public class ClienteService {
     public Page<ClienteResponseDto> listarClientes(Pageable pageable) {
         Page<Cliente> page = clienteRepository.findAll(pageable); // JpaRepository ya lo trae
         return clienteMapper.toResponseDtoPage(page);
+    }
+
+    /**
+     * Bloquear un cliente.
+     * 
+     * POST /api/clientes/{id}/bloquear
+     */
+    @Transactional
+    public BloqueoClienteResponseDto bloquearCliente(Long id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Cliente no encontrado con id " + id));
+
+        String estadoAnterior = cliente.getEstado().name();
+
+        // Bloquear el cliente
+        cliente.bloquear();
+
+        // Persistir cambios
+        clienteRepository.save(cliente);
+
+        return new BloqueoClienteResponseDto(
+                cliente.getId(),
+                estadoAnterior,
+                cliente.getEstado().name());
     }
 
 }

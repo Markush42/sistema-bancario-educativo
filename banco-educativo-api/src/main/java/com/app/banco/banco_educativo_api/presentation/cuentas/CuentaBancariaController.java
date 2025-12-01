@@ -3,6 +3,7 @@ package com.app.banco.banco_educativo_api.presentation.cuentas;
 import com.app.banco.banco_educativo_api.application.cuentas.CuentaBancariaService;
 import com.app.banco.banco_educativo_api.application.cuentas.dto.CuentaBancariaRequestDto;
 import com.app.banco.banco_educativo_api.application.cuentas.dto.CuentaBancariaResponseDto;
+import com.app.banco.banco_educativo_api.application.operaciones.dto.MovimientoResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,8 +33,7 @@ public class CuentaBancariaController {
      */
     @PostMapping
     public ResponseEntity<CuentaBancariaResponseDto> crearCuenta(
-            @Valid @RequestBody CuentaBancariaRequestDto requestDto
-    ) {
+            @Valid @RequestBody CuentaBancariaRequestDto requestDto) {
         CuentaBancariaResponseDto response = cuentaBancariaService.crearCuentaBancaria(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -71,13 +71,28 @@ public class CuentaBancariaController {
     public ResponseEntity<?> obtenerSaldo(@PathVariable Long id) {
         CuentaBancariaResponseDto cuenta = cuentaBancariaService.obtenerCuentaBancariaPorId(id);
 
-        // Podrías devolver directamente la cuenta, pero acá hago un payload bien explícito:
+        // Podrías devolver directamente la cuenta, pero acá hago un payload bien
+        // explícito:
         return ResponseEntity.ok(
                 new SaldoResponse(
                         cuenta.getId(),
-                        cuenta.getSaldo()
-                )
-        );
+                        cuenta.getSaldo()));
+    }
+
+    /**
+     * Consultar movimientos de cuenta.
+     * 
+     * GET /api/cuentas/{id}/movimientos
+     */
+    @GetMapping("/{id}/movimientos")
+    public ResponseEntity<List<MovimientoResponseDto>> obtenerMovimientos(@PathVariable Long id) {
+        // Validar que la cuenta existe primero
+        cuentaBancariaService.obtenerCuentaBancariaPorId(id);
+
+        // Obtener movimientos
+        List<MovimientoResponseDto> movimientos = cuentaBancariaService.obtenerMovimientosCuenta(id);
+
+        return ResponseEntity.ok(movimientos);
     }
 
     /**
@@ -95,5 +110,6 @@ public class CuentaBancariaController {
      * DTO interno para respuesta de saldo.
      * Si querés, lo podés mover a un paquete dto específico.
      */
-    public record SaldoResponse(Long cuentaId, BigDecimal saldoActual) {}
+    public record SaldoResponse(Long cuentaId, BigDecimal saldoActual) {
+    }
 }
