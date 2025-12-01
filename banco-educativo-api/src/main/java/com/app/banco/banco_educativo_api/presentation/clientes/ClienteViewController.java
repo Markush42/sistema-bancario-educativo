@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
  * Capa: PRESENTATION (Web MVC)
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/mvc/clientes")
 @RequiredArgsConstructor
 public class ClienteViewController {
 
     private final ClienteService clienteService;
 
-    @GetMapping
+    @GetMapping()
     public String clientes(Model model) {
         // Obtenemos todos los clientes desde el servicio
         List<ClienteResponseDto> clientes = clienteService.listarTodosLosClientes();
