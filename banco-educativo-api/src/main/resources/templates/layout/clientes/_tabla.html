@@ -32,8 +32,9 @@
                     <td th:text="${cliente.direccion}"></td>
                     <td th:text="${cliente.estado}"></td>
                     <td>
-                        <button class="btn-editar" type="button">Editar</button>
-                        <button class="btn-eliminar" type="button">Eliminar</button>
+                        <button action="btn-editar" class="btn-editar btn-action btn-edit" type="button">Editar</button>
+                        <button action="btn-eliminar" class="btn-eliminar btn-action btn-delete"
+                            type="button">Eliminar</button>
                     </td>
                 </tr>
             </tbody>
