@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/clientes")
 @RequiredArgsConstructor
-public class ClienteController {
+public class ClienteRestController {
 
     private final ClienteService clienteService;
 

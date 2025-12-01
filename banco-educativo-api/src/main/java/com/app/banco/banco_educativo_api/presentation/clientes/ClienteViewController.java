@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
  * Capa: PRESENTATION (Web MVC)
  */
 @Controller
-@RequestMapping("/mvc/clientes")
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class ClienteViewController {
 
     private final ClienteService clienteService;
 
-    @GetMapping()
+    @GetMapping("/clientes")
     public String clientes(Model model) {
         // Obtenemos todos los clientes desde el servicio
         List<ClienteResponseDto> clientes = clienteService.listarTodosLosClientes();
@@ -44,7 +44,8 @@ public class ClienteViewController {
         ClienteViewDto viewDto = new ClienteViewDto();
         viewDto.setId(dto.id());
         viewDto.setTipoPersona(dto.tipoPersona().name());
-        viewDto.setNombreCompleto(dto.nombre() + " " + dto.apellido());
+        viewDto.setNombre(dto.nombre());
+        viewDto.setApellido(dto.apellido());
         viewDto.setTipoDocumento(dto.tipoDocumento().name());
         viewDto.setNumeroDocumento(dto.numeroDocumento());
         viewDto.setEmail(dto.email());
@@ -58,7 +59,8 @@ public class ClienteViewController {
     public static class ClienteViewDto {
         private Long id;
         private String tipoPersona;
-        private String nombreCompleto;
+        private String nombre;
+        private String apellido;
         private String tipoDocumento;
         private String numeroDocumento;
         private String email;
@@ -83,12 +85,12 @@ public class ClienteViewController {
             this.tipoPersona = tipoPersona;
         }
 
-        public String getNombreCompleto() {
-            return nombreCompleto;
+        public String getNombre() {
+            return nombre;
         }
 
-        public void setNombreCompleto(String nombreCompleto) {
-            this.nombreCompleto = nombreCompleto;
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
         }
 
         public String getTipoDocumento() {
@@ -97,6 +99,14 @@ public class ClienteViewController {
 
         public void setTipoDocumento(String tipoDocumento) {
             this.tipoDocumento = tipoDocumento;
+        }
+
+        public String getApellido() {
+            return apellido;
+        }
+
+        public void setApellido(String apellido) {
+            this.apellido = apellido;
         }
 
         public String getNumeroDocumento() {
@@ -140,18 +150,18 @@ public class ClienteViewController {
         }
     }
 
-    // DTO para el formulario (vacío, solo para binding)
+    // DTO para el formulario (para binding con Thymeleaf)
     public static class ClienteFormDto {
+
+        // opcional si luego quieres usarlo para edición
         private Long id;
-        private String tipoPersona;
-        private String nombreCompleto;
-        private String tipoDocumento;
-        private String numeroDocumento;
-        private String email;
-        private String telefono;
-        private String direccion;
+
+        private String nombre;
+        private String apellido;
+        private String dni;
 
         // Getters y Setters
+
         public Long getId() {
             return id;
         }
@@ -160,60 +170,29 @@ public class ClienteViewController {
             this.id = id;
         }
 
-        public String getTipoPersona() {
-            return tipoPersona;
+        public String getNombre() {
+            return nombre;
         }
 
-        public void setTipoPersona(String tipoPersona) {
-            this.tipoPersona = tipoPersona;
+        public void setNombre(String nombre) {
+            this.nombre = nombre;
         }
 
-        public String getNombreCompleto() {
-            return nombreCompleto;
+        public String getApellido() {
+            return apellido;
         }
 
-        public void setNombreCompleto(String nombreCompleto) {
-            this.nombreCompleto = nombreCompleto;
+        public void setApellido(String apellido) {
+            this.apellido = apellido;
         }
 
-        public String getTipoDocumento() {
-            return tipoDocumento;
+        public String getDni() {
+            return dni;
         }
 
-        public void setTipoDocumento(String tipoDocumento) {
-            this.tipoDocumento = tipoDocumento;
-        }
-
-        public String getNumeroDocumento() {
-            return numeroDocumento;
-        }
-
-        public void setNumeroDocumento(String numeroDocumento) {
-            this.numeroDocumento = numeroDocumento;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getTelefono() {
-            return telefono;
-        }
-
-        public void setTelefono(String telefono) {
-            this.telefono = telefono;
-        }
-
-        public String getDireccion() {
-            return direccion;
-        }
-
-        public void setDireccion(String direccion) {
-            this.direccion = direccion;
+        public void setDni(String dni) {
+            this.dni = dni;
         }
     }
+
 }

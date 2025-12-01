@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <section th:fragment="tablaClientes">
+        <table id="tabla-clientes" class="tabla-clientes">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo Persona</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Tipo Doc</th>
+                    <th>N° Doc</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cliente : ${clientes}" th:attr="data-cliente-id=${cliente.id}">
+                    <td th:text="${cliente.id}"></td>
+                    <td th:text="${cliente.tipoPersona}"></td>
+                    <td th:text="${cliente.nombre}"></td>
+                    <td th:text="${cliente.apellido}"></td>
+                    <td th:text="${cliente.tipoDocumento}"></td>
+                    <td th:text="${cliente.numeroDocumento}"></td>
+                    <td th:text="${cliente.email}"></td>
+                    <td th:text="${cliente.telefono}"></td>
+                    <td th:text="${cliente.direccion}"></td>
+                    <td th:text="${cliente.estado}"></td>
+                    <td>
+                        <button class="btn-editar" type="button">Editar</button>
+                        <button class="btn-eliminar" type="button">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+
+</html>

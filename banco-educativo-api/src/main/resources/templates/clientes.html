@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title th:text="${pageTitle}">Gestión de Clientes</title>
 
-    <link rel="stylesheet" th:href="@{/css/clientes.css}">
+    <link rel="stylesheet" th:href="@{static/css/clientes.css}">
 
-    <!-- CSRF (si usas Spring Security con CSRF) -->
-    <meta name="_csrf" th:content="${_csrf.token}" />
-    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+
 </head>
+
 <body>
-<div class="container">
+    <div class="container">
 
-    <h1 th:text="${pageTitle}">Gestión de Clientes</h1>
+        <h1 th:text="${pageTitle}">Gestión de Clientes</h1>
 
-    <!-- Config para JS: URL base de la API REST -->
-    <div id="app-config"
-         th:attr="data-api-clientes-url=@{/api/clientes}">
+        <!-- Config para JS: URL base de la API REST -->
+        <div id="app-config" th:attr="data-api-clientes-url=@{/api/clientes}">
+        </div>
+
+        <section class="clientes-layout">
+            <!-- Columna: tabla de clientes -->
+            <div class="clientes-list">
+                <div th:replace="layout/clientes/_tabla :: tablaClientes"></div>
+            </div>
+
+
+            <!-- Columna: formulario -->
+            <div class="clientes-form">
+                <div th:replace="layout/clientes/_form :: formularioCliente(${clienteForm})"></div>
+            </div>
+        </section>
+
     </div>
 
-    <section class="clientes-layout">
-        <!-- Columna: tabla de clientes -->
-        <div class="clientes-list">
-            <div th:replace="clientes/_tabla :: tablaClientes"></div>
-        </div>
-
-        <!-- Columna: formulario -->
-        <div class="clientes-form">
-            <div th:replace="clientes/_form :: formularioCliente(${clienteForm})"></div>
-        </div>
-    </section>
-
-</div>
-
-<script th:src="@{/js/clientes.js}"></script>
+    <script th:src="@{static/js/clientes.js}"></script>
 </body>
+
 </html>
