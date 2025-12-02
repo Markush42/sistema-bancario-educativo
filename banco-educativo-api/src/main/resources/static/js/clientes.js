@@ -122,33 +122,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const raw = Object.fromEntries(formData.entries());
     const id = raw.id || "";
 
-    // Si es creación (sin id), usamos ClienteRequestDto simplificado
-    if (!id) {
-      return {
-        payload: {
-          nombre: raw.nombre || null,
-          apellido: raw.apellido || null,
-          dni: raw.dni || null
-        },
-        id: ""
-      };
-    }
-
-    // Si es actualización (con id), usamos ClienteUpdateRequestDto completo
-    return {
-      payload: {
-        tipoPersona: raw.tipoPersona || "FISICA",
-        nombre: raw.nombre || null,
-        apellido: raw.apellido || null,
-        tipoDocumento: raw.tipoDocumento || "DNI",
-        numeroDocumento: raw.dni || null,
-        email: raw.email || null,
-        telefono: raw.telefono || null,
-        direccion: raw.direccion || null,
-        estado: raw.estado || "ACTIVO"
-      },
-      id: id
+    // Payload completo para creación y actualización
+    const payload = {
+      tipoPersona: raw.tipoPersona || "FISICA",
+      nombre: raw.nombre || null,
+      apellido: raw.apellido || null,
+      tipoDocumento: raw.tipoDocumento || "DNI",
+      numeroDocumento: raw.dni || null,
+      email: raw.email || null,
+      telefono: raw.telefono || null,
+      direccion: raw.direccion || null,
+      estado: raw.estado || "ACTIVO"
     };
+
+    return { payload, id };
   }
 
   // --- Guardar (crear o actualizar) ---

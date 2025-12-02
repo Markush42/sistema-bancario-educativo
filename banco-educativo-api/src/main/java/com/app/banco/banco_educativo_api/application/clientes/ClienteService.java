@@ -35,14 +35,13 @@ public class ClienteService {
 
     /**
      * Crear un nuevo cliente a partir del DTO de request.
-     * En el MVP actual todos los tipos de documento se hardcodean a DNI.
      */
     @Transactional
     public ClienteResponseDto crearCliente(ClienteRequestDto requestDto) {
 
         // 1) Datos clave para la unicidad
-        String numeroDocumento = requestDto.dni();
-        TipoDocumento tipoDocumento = TipoDocumento.DNI; // MVP
+        String numeroDocumento = requestDto.numeroDocumento();
+        TipoDocumento tipoDocumento = requestDto.tipoDocumento();
 
         // 2) Pre-chequeo antes de tocar la BD
         boolean existe = clienteRepository
@@ -54,7 +53,7 @@ public class ClienteService {
                             tipoDocumento + " " + numeroDocumento);
         }
 
-        // 3) Mapear DTO -> Entidad (mapper adaptado a records)
+        // 3) Mapear DTO -> Entidad
         Cliente cliente = clienteMapper.toEntity(requestDto);
 
         // 4) Persistir y devolver DTO de salida
