@@ -3,52 +3,90 @@
    Diseño UI/UX Moderno
    ============================================ */
 
-/* ===== VARIABLES CSS ===== */
+/* ===== VARIABLES CSS - BANCO EMPRESARIAL ===== */
 :root {
-    /* Colores Principales */
-    --primary: #6366f1;
-    --primary-dark: #4f46e5;
-    --primary-light: #818cf8;
-    --secondary: #ec4899;
-    --secondary-dark: #db2777;
+    /* Colores Principales - Azul Corporativo */
+    --primary: #1e3a8a;
+    /* Azul Navy Profundo - Confianza */
+    --primary-dark: #1e40af;
+    /* Azul Corporativo Oscuro */
+    --primary-light: #3b82f6;
+    /* Azul Corporativo Claro */
+    --secondary: #0f766e;
+    /* Verde Teal Financiero - Crecimiento */
+    --secondary-dark: #115e59;
+    /* Verde Teal Oscuro */
 
     /* Colores de Estado */
-    --success: #10b981;
-    --success-dark: #059669;
-    --danger: #ef4444;
-    --danger-dark: #dc2626;
-    --warning: #f59e0b;
-    --warning-dark: #d97706;
-    --info: #06b6d4;
-    --info-dark: #0891b2;
+    --success: #047857;
+    /* Verde Financiero - Prosperidad */
+    --success-dark: #065f46;
+    /* Verde Esmeralda Oscuro */
+    --danger: #b91c1c;
+    /* Rojo Corporativo - Alerta */
+    --danger-dark: #991b1b;
+    /* Rojo Oscuro */
+    --warning: #d97706;
+    /* Ámbar Corporativo - Precaución */
+    --warning-dark: #b45309;
+    /* Ámbar Oscuro */
+    --info: #0369a1;
+    /* Azul Cielo Corporativo - Información */
+    --info-dark: #075985;
+    /* Azul Cielo Oscuro */
+
+    /* Acentos Premium */
+    --accent-gold: #d4af37;
+    /* Dorado Corporativo - Premium */
+    --accent-gold-dark: #b8941f;
+    /* Dorado Oscuro */
+    --accent-silver: #94a3b8;
+    /* Plata - Elegancia */
 
     /* Colores de Fondo */
     --bg-primary: #f8fafc;
+    /* Gris Muy Claro */
     --bg-secondary: #f1f5f9;
+    /* Gris Claro */
+    --bg-dark: #0f172a;
+    /* Azul Oscuro Corporativo */
     --surface: #ffffff;
+    /* Blanco */
     --surface-hover: #f8fafc;
+    /* Hover Sutil */
 
     /* Colores de Texto */
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
+    --text-primary: #0f172a;
+    /* Azul Oscuro Casi Negro */
+    --text-secondary: #475569;
+    /* Gris Slate */
     --text-muted: #94a3b8;
+    /* Gris Claro */
     --text-white: #ffffff;
+    /* Blanco */
+    --text-gold: #d4af37;
+    /* Dorado para acentos */
 
     /* Bordes */
-    --border-color: #e2e8f0;
-    --border-light: #f1f5f9;
+    --border-color: #cbd5e1;
+    /* Gris Medio */
+    --border-light: #e2e8f0;
+    /* Gris Claro */
+    --border-dark: #64748b;
+    /* Gris Oscuro */
 
-    /* Sombras */
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    /* Sombras Profesionales */
+    --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -1px rgba(15, 23, 42, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -2px rgba(15, 23, 42, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.15), 0 10px 10px -5px rgba(15, 23, 42, 0.08);
 
     /* Radios */
-    --radius-sm: 0.375rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
+    --radius-sm: 0.25rem;
+    /* Bordes más rectos y profesionales */
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
 
     /* Espaciado */
     --spacing-xs: 0.5rem;
@@ -73,7 +111,7 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f766e 100%);
     background-attachment: fixed;
     color: var(--text-primary);
     line-height: 1.6;
@@ -102,12 +140,13 @@ body {
 
 /* ===== HEADER ===== */
 .page-header {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, var(--secondary) 100%);
     border-radius: var(--radius-xl);
     padding: var(--spacing-xl);
     margin-bottom: var(--spacing-xl);
     box-shadow: var(--shadow-xl);
     color: var(--text-white);
+    border-top: 3px solid var(--accent-gold);
 }
 
 .header-content {
@@ -207,18 +246,22 @@ body {
 
 .stat-card-primary .stat-icon {
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
 }
 
 .stat-card-success .stat-icon {
-    background: linear-gradient(135deg, var(--success), #34d399);
+    background: linear-gradient(135deg, var(--success), #059669);
+    box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
 }
 
 .stat-card-danger .stat-icon {
-    background: linear-gradient(135deg, var(--danger), #f87171);
+    background: linear-gradient(135deg, var(--danger), #dc2626);
+    box-shadow: 0 4px 12px rgba(185, 28, 28, 0.3);
 }
 
 .stat-card-info .stat-icon {
-    background: linear-gradient(135deg, var(--info), #22d3ee);
+    background: linear-gradient(135deg, var(--info), #0284c7);
+    box-shadow: 0 4px 12px rgba(3, 105, 161, 0.3);
 }
 
 .stat-content {
@@ -362,8 +405,9 @@ body {
 }
 
 .tabla-clientes thead {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark), var(--secondary-dark));
     color: var(--text-white);
+    border-bottom: 2px solid var(--accent-gold);
 }
 
 .tabla-clientes th {
@@ -407,13 +451,14 @@ body {
 }
 
 .id-badge {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
     color: var(--text-white);
     padding: 0.25rem 0.75rem;
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 700;
     display: inline-block;
+    box-shadow: 0 2px 4px rgba(30, 58, 138, 0.2);
 }
 
 .email-text {
@@ -444,11 +489,13 @@ body {
 .badge-activo {
     background: linear-gradient(135deg, #d1fae5, #a7f3d0);
     color: #065f46;
+    border: 1px solid var(--success);
 }
 
 .badge-bloqueado {
     background: linear-gradient(135deg, #fee2e2, #fecaca);
     color: #991b1b;
+    border: 1px solid var(--danger);
 }
 
 /* ===== BOTONES DE ACCIÓN EN TABLA ===== */
@@ -651,10 +698,12 @@ select.form-control {
 .btn-primary {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: var(--text-white);
+    border: 1px solid var(--primary-dark);
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    background: linear-gradient(135deg, var(--primary-dark), var(--secondary-dark));
+    border-color: var(--accent-gold);
 }
 
 .btn-secondary {
@@ -704,14 +753,16 @@ select.form-control {
 
 .alert-success {
     background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-    border-color: var(--success);
+    border-color: var(--success-dark);
     color: #065f46;
+    box-shadow: 0 2px 8px rgba(4, 120, 87, 0.15);
 }
 
 .alert-error {
     background: linear-gradient(135deg, #fee2e2, #fecaca);
-    border-color: var(--danger);
+    border-color: var(--danger-dark);
     color: #991b1b;
+    box-shadow: 0 2px 8px rgba(185, 28, 28, 0.15);
 }
 
 /* ===== RESPONSIVE ===== */
