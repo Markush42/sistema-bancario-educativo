@@ -3,10 +3,7 @@ package com.app.banco.banco_educativo_api.application.clientes.mapper;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteRequestDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteUpdateRequestDto;
-import com.app.banco.banco_educativo_api.application.clientes.dto.ClienteResponseDto;
 import com.app.banco.banco_educativo_api.domain.clientes.Cliente;
-import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoDocumento;
-import com.app.banco.banco_educativo_api.domain.clientes.enums.TipoPersona;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -21,9 +18,6 @@ import java.util.List;
 @Component
 public class ClienteMapperImpl implements ClienteMapper {
 
-    private static final TipoPersona DEFAULT_TIPO_PERSONA = TipoPersona.FISICA;
-    private static final TipoDocumento DEFAULT_TIPO_DOCUMENTO = TipoDocumento.DNI;
-
     @Override
     public Cliente toEntity(ClienteRequestDto dto) {
         if (dto == null) {
@@ -32,13 +26,16 @@ public class ClienteMapperImpl implements ClienteMapper {
 
         Cliente cliente = new Cliente();
 
+        // Mapear todos los campos del DTO
+        cliente.setTipoPersona(dto.tipoPersona());
         cliente.setNombre(dto.nombre());
         cliente.setApellido(dto.apellido());
-        cliente.setNumeroDocumento(dto.dni());
-
-        // Defaults controlados por constantes
-        cliente.setTipoPersona(DEFAULT_TIPO_PERSONA);
-        cliente.setTipoDocumento(DEFAULT_TIPO_DOCUMENTO);
+        cliente.setTipoDocumento(dto.tipoDocumento());
+        cliente.setNumeroDocumento(dto.numeroDocumento());
+        cliente.setEmail(dto.email());
+        cliente.setTelefono(dto.telefono());
+        cliente.setDireccion(dto.direccion());
+        cliente.setEstado(dto.estado());
 
         return cliente;
     }
