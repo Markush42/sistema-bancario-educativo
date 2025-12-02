@@ -168,4 +168,28 @@ public class ClienteService {
                 cliente.getEstado().name());
     }
 
+    /**
+     * Activar un cliente (desbloquear).
+     * 
+     * POST /api/clientes/{id}/activar
+     */
+    @Transactional
+    public BloqueoClienteResponseDto activarCliente(Long id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Cliente no encontrado con id " + id));
+
+        String estadoAnterior = cliente.getEstado().name();
+
+        // Activar el cliente
+        cliente.activar();
+
+        // Persistir cambios
+        clienteRepository.save(cliente);
+
+        return new BloqueoClienteResponseDto(
+                cliente.getId(),
+                estadoAnterior,
+                cliente.getEstado().name());
+    }
+
 }

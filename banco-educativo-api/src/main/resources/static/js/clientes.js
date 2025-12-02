@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("cliente-form");
   const btnGuardar = document.getElementById("btn-guardar");
   const btnLimpiar = document.getElementById("btn-limpiar");
+  const alertContainer = document.getElementById("alert-container");
 
   const configDiv = document.getElementById("app-config");
   const apiClientesUrl = configDiv ? configDiv.dataset.apiClientesUrl : null;
@@ -25,6 +26,42 @@ document.addEventListener("DOMContentLoaded", () => {
     return headers;
   }
 
+  // --- Helpers para mensajes de alerta ---
+  function mostrarAlerta(mensaje, tipo = "error") {
+    if (!alertContainer) return;
+
+    const alertClass = tipo === "success" ? "alert-success" : "alert-error";
+    alertContainer.innerHTML = `
+      <div class="alert ${alertClass}">
+        ${mensaje}
+      </div>
+    `;
+
+    setTimeout(() => {
+      alertContainer.innerHTML = "";
+    }, 5000);
+  }
+
+  function limpiarErrores() {
+    const errorSpans = document.querySelectorAll(".error-message");
+    errorSpans.forEach(span => span.textContent = "");
+
+    const invalidInputs = document.querySelectorAll(".form-control.is-invalid");
+    invalidInputs.forEach(input => input.classList.remove("is-invalid"));
+  }
+
+  function mostrarErrorCampo(campo, mensaje) {
+    const input = document.getElementById(campo);
+    const errorSpan = document.getElementById(`error-${campo}`);
+
+    if (input) {
+      input.classList.add("is-invalid");
+    }
+    if (errorSpan) {
+      errorSpan.textContent = mensaje;
+    }
+  }
+
   // --- Helpers para el formulario ---
 
   function limpiarFormulario() {
@@ -34,37 +71,73 @@ document.addEventListener("DOMContentLoaded", () => {
     if (idInput) {
       idInput.value = "";
     }
+    limpiarErrores();
+    if (alertContainer) {
+      alertContainer.innerHTML = "";
+    }
   }
 
   function llenarFormularioDesdeDto(dto) {
     if (!form || !dto) return;
 
     const idInput = document.getElementById("id");
+    const tipoPersonaInput = document.getElementById("tipoPersona");
     const nombreInput = document.getElementById("nombre");
     const apellidoInput = document.getElementById("apellido");
+    const tipoDocumentoInput = document.getElementById("tipoDocumento");
     const dniInput = document.getElementById("dni");
+    const emailInput = document.getElementById("email");
+    const telefonoInput = document.getElementById("telefono");
+    const direccionInput = document.getElementById("direccion");
+    const estadoInput = document.getElementById("estado");
 
     if (idInput) idInput.value = dto.id ?? "";
+    if (tipoPersonaInput) tipoPersonaInput.value = dto.tipoPersona ?? "FISICA";
     if (nombreInput) nombreInput.value = dto.nombre ?? "";
     if (apellidoInput) apellidoInput.value = dto.apellido ?? "";
-    // toleramos que el backend lo devuelva como `dni` o como `numeroDocumento`
-    if (dniInput) dniInput.value = dto.dni ?? dto.numeroDocumento ?? "";
+    if (tipoDocumentoInput) tipoDocumentoInput.value = dto.tipoDocumento ?? "DNI";
+    if (dniInput) dniInput.value = dto.numeroDocumento ?? "";
+    if (emailInput) emailInput.value = dto.email ?? "";
+    if (telefonoInput) telefonoInput.value = dto.telefono ?? "";
+    if (direccionInput) direccionInput.value = dto.direccion ?? "";
+    if (estadoInput) estadoInput.value = dto.estado ?? "ACTIVO";
+
+    limpiarErrores();
   }
 
   function construirPayloadCliente() {
     if (!form) return null;
     const formData = new FormData(form);
     const raw = Object.fromEntries(formData.entries());
+    const id = raw.id || "";
 
-    // Payload EXACTO de ClienteRequestDto:
-    // nombre, apellido, dni
-    const payload = {
-      nombre: raw.nombre || null,
-      apellido: raw.apellido || null,
-      dni: raw.dni || null
+    // Si es creación (sin id), usamos ClienteRequestDto simplificado
+    if (!id) {
+      return {
+        payload: {
+          nombre: raw.nombre || null,
+          apellido: raw.apellido || null,
+          dni: raw.dni || null
+        },
+        id: ""
+      };
+    }
+
+    // Si es actualización (con id), usamos ClienteUpdateRequestDto completo
+    return {
+      payload: {
+        tipoPersona: raw.tipoPersona || "FISICA",
+        nombre: raw.nombre || null,
+        apellido: raw.apellido || null,
+        tipoDocumento: raw.tipoDocumento || "DNI",
+        numeroDocumento: raw.dni || null,
+        email: raw.email || null,
+        telefono: raw.telefono || null,
+        direccion: raw.direccion || null,
+        estado: raw.estado || "ACTIVO"
+      },
+      id: id
     };
-
-    return { payload, id: raw.id || "" };
   }
 
   // --- Guardar (crear o actualizar) ---
@@ -73,6 +146,8 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("API clientes URL no configurada");
       return;
     }
+
+    limpiarErrores();
 
     const data = construirPayloadCliente();
     if (!data) return;
@@ -93,19 +168,40 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Error HTTP:", response.status, errorText);
-        alert("Error al guardar el cliente. Revisa la consola para más detalles.");
+
+        // Intentar parsear errores de validación
+        try {
+          const errorJson = JSON.parse(errorText);
+          if (errorJson.errors) {
+            // Errores de validación de Spring
+            Object.keys(errorJson.errors).forEach(campo => {
+              mostrarErrorCampo(campo, errorJson.errors[campo]);
+            });
+          } else {
+            mostrarAlerta(errorJson.message || "Error al guardar el cliente");
+          }
+        } catch (e) {
+          mostrarAlerta("Error al guardar el cliente. Revisa los datos ingresados.");
+        }
         return;
       }
 
       const dataResp = await response.json();
       console.log("Cliente guardado:", dataResp);
 
-      // Para simplificar, recargamos la página y vemos la tabla actualizada
-      window.location.reload();
+      mostrarAlerta(
+        esEdicion ? "Cliente actualizado correctamente" : "Cliente creado correctamente",
+        "success"
+      );
+
+      // Recargar después de un breve delay para que se vea el mensaje
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
 
     } catch (err) {
       console.error("Error en la petición de guardado:", err);
-      alert("Error de red al guardar el cliente.");
+      mostrarAlerta("Error de red al guardar el cliente.");
     }
   }
 
@@ -123,18 +219,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!response.ok) {
         console.error("Error obteniendo cliente:", response.status);
-        alert("No se pudo obtener el cliente para editar.");
+        mostrarAlerta("No se pudo obtener el cliente para editar.");
         return;
       }
 
       const dto = await response.json();
       console.log("Cliente para edición:", dto);
 
-      // dto debería tener al menos: id, nombre, apellido, dni o numeroDocumento
       llenarFormularioDesdeDto(dto);
+
+      // Scroll al formulario
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (err) {
       console.error("Error en la petición de edición:", err);
-      alert("Error de red al obtener el cliente.");
+      mostrarAlerta("Error de red al obtener el cliente.");
     }
   }
 
@@ -155,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!response.ok) {
         console.error("Error eliminando cliente:", response.status);
-        alert("No se pudo eliminar el cliente.");
+        mostrarAlerta("No se pudo eliminar el cliente.");
         return;
       }
 
@@ -164,10 +262,80 @@ document.addEventListener("DOMContentLoaded", () => {
         fila.parentNode.removeChild(fila);
       }
 
-      // Si preferís, podrías hacer: window.location.reload();
+      mostrarAlerta("Cliente eliminado correctamente", "success");
     } catch (err) {
       console.error("Error en la petición de eliminación:", err);
-      alert("Error de red al eliminar el cliente.");
+      mostrarAlerta("Error de red al eliminar el cliente.");
+    }
+  }
+
+  // --- Bloquear: POST /api/clientes/{id}/bloquear ---
+  async function bloquearCliente(id) {
+    if (!apiClientesUrl) return;
+
+    const confirmar = window.confirm(`¿Seguro que deseas bloquear el cliente con id ${id}?`);
+    if (!confirmar) return;
+
+    const url = `${apiClientesUrl}/${id}/bloquear`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: buildHeaders()
+      });
+
+      if (!response.ok) {
+        console.error("Error bloqueando cliente:", response.status);
+        mostrarAlerta("No se pudo bloquear el cliente.");
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Cliente bloqueado:", data);
+
+      mostrarAlerta("Cliente bloqueado correctamente", "success");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (err) {
+      console.error("Error en la petición de bloqueo:", err);
+      mostrarAlerta("Error de red al bloquear el cliente.");
+    }
+  }
+
+  // --- Activar: POST /api/clientes/{id}/activar ---
+  async function activarCliente(id) {
+    if (!apiClientesUrl) return;
+
+    const confirmar = window.confirm(`¿Seguro que deseas activar el cliente con id ${id}?`);
+    if (!confirmar) return;
+
+    const url = `${apiClientesUrl}/${id}/activar`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: buildHeaders()
+      });
+
+      if (!response.ok) {
+        console.error("Error activando cliente:", response.status);
+        mostrarAlerta("No se pudo activar el cliente.");
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Cliente activado:", data);
+
+      mostrarAlerta("Cliente activado correctamente", "success");
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } catch (err) {
+      console.error("Error en la petición de activación:", err);
+      mostrarAlerta("Error de red al activar el cliente.");
     }
   }
 
@@ -203,6 +371,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const fila = target.closest("tr");
         const id = fila.dataset.clienteId;
         eliminarCliente(id, fila);
+      }
+
+      // BLOQUEAR
+      if (target.classList.contains("btn-bloquear")) {
+        const fila = target.closest("tr");
+        const id = fila.dataset.clienteId;
+        bloquearCliente(id);
+      }
+
+      // ACTIVAR
+      if (target.classList.contains("btn-activar")) {
+        const fila = target.closest("tr");
+        const id = fila.dataset.clienteId;
+        activarCliente(id);
       }
     });
   }

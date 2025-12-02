@@ -30,11 +30,17 @@
                     <td th:text="${cliente.email}"></td>
                     <td th:text="${cliente.telefono}"></td>
                     <td th:text="${cliente.direccion}"></td>
-                    <td th:text="${cliente.estado}"></td>
                     <td>
-                        <button action="btn-editar" class="btn-editar btn-action btn-edit" type="button">Editar</button>
-                        <button action="btn-eliminar" class="btn-eliminar btn-action btn-delete"
-                            type="button">Eliminar</button>
+                        <span th:class="${cliente.estado == 'ACTIVO' ? 'badge badge-activo' : 'badge badge-bloqueado'}"
+                            th:text="${cliente.estado}"></span>
+                    </td>
+                    <td>
+                        <button class="btn-editar btn-action btn-edit" type="button">Editar</button>
+                        <button th:if="${cliente.estado == 'ACTIVO'}" class="btn-bloquear btn-action btn-block"
+                            type="button">Bloquear</button>
+                        <button th:if="${cliente.estado == 'BLOQUEADO'}" class="btn-activar btn-action btn-success"
+                            type="button">Activar</button>
+                        <button class="btn-eliminar btn-action btn-delete" type="button">Eliminar</button>
                     </td>
                 </tr>
             </tbody>
