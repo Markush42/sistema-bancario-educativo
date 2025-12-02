@@ -3,48 +3,76 @@
 
 <body>
     <section th:fragment="tablaClientes">
-        <table id="tabla-clientes" class="tabla-clientes">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Tipo Persona</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Tipo Doc</th>
-                    <th>N° Doc</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Dirección</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="cliente : ${clientes}" th:attr="data-cliente-id=${cliente.id}">
-                    <td th:text="${cliente.id}"></td>
-                    <td th:text="${cliente.tipoPersona}"></td>
-                    <td th:text="${cliente.nombre}"></td>
-                    <td th:text="${cliente.apellido}"></td>
-                    <td th:text="${cliente.tipoDocumento}"></td>
-                    <td th:text="${cliente.numeroDocumento}"></td>
-                    <td th:text="${cliente.email}"></td>
-                    <td th:text="${cliente.telefono}"></td>
-                    <td th:text="${cliente.direccion}"></td>
-                    <td>
-                        <span th:class="${cliente.estado == 'ACTIVO' ? 'badge badge-activo' : 'badge badge-bloqueado'}"
-                            th:text="${cliente.estado}"></span>
-                    </td>
-                    <td>
-                        <button class="btn-editar btn-action btn-edit" type="button">Editar</button>
-                        <button th:if="${cliente.estado == 'ACTIVO'}" class="btn-bloquear btn-action btn-block"
-                            type="button">Bloquear</button>
-                        <button th:if="${cliente.estado == 'BLOQUEADO'}" class="btn-activar btn-action btn-success"
-                            type="button">Activar</button>
-                        <button class="btn-eliminar btn-action btn-delete" type="button">Eliminar</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table id="tabla-clientes" class="tabla-clientes">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag"></i> ID</th>
+                        <th><i class="fas fa-user"></i> Tipo Persona</th>
+                        <th><i class="fas fa-signature"></i> Nombre</th>
+                        <th><i class="fas fa-signature"></i> Apellido</th>
+                        <th><i class="fas fa-id-card"></i> Tipo Doc</th>
+                        <th><i class="fas fa-id-card-alt"></i> N° Doc</th>
+                        <th><i class="fas fa-envelope"></i> Email</th>
+                        <th><i class="fas fa-phone"></i> Teléfono</th>
+                        <th><i class="fas fa-map-marker-alt"></i> Dirección</th>
+                        <th><i class="fas fa-toggle-on"></i> Estado</th>
+                        <th><i class="fas fa-cog"></i> Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cliente : ${clientes}" th:attr="data-cliente-id=${cliente.id}" class="table-row">
+                        <td><span class="id-badge" th:text="${cliente.id}"></span></td>
+                        <td th:text="${cliente.tipoPersona}"></td>
+                        <td><strong th:text="${cliente.nombre}"></strong></td>
+                        <td><strong th:text="${cliente.apellido}"></strong></td>
+                        <td th:text="${cliente.tipoDocumento}"></td>
+                        <td th:text="${cliente.numeroDocumento}"></td>
+                        <td>
+                            <span th:if="${cliente.email}" class="email-text">
+                                <i class="fas fa-envelope"></i>
+                                <span th:text="${cliente.email}"></span>
+                            </span>
+                            <span th:unless="${cliente.email}" class="text-muted">-</span>
+                        </td>
+                        <td>
+                            <span th:if="${cliente.telefono}" th:text="${cliente.telefono}"></span>
+                            <span th:unless="${cliente.telefono}" class="text-muted">-</span>
+                        </td>
+                        <td>
+                            <span th:if="${cliente.direccion}" th:text="${cliente.direccion}"></span>
+                            <span th:unless="${cliente.direccion}" class="text-muted">-</span>
+                        </td>
+                        <td>
+                            <span
+                                th:class="${cliente.estado == 'ACTIVO' ? 'badge badge-activo' : 'badge badge-bloqueado'}">
+                                <i th:class="${cliente.estado == 'ACTIVO' ? 'fas fa-check-circle' : 'fas fa-ban'}"></i>
+                                <span th:text="${cliente.estado}"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-editar btn-action btn-edit" type="button" title="Editar cliente">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button th:if="${cliente.estado == 'ACTIVO'}" class="btn-bloquear btn-action btn-block"
+                                    type="button" title="Bloquear cliente">
+                                    <i class="fas fa-lock"></i>
+                                </button>
+                                <button th:if="${cliente.estado == 'BLOQUEADO'}"
+                                    class="btn-activar btn-action btn-success" type="button" title="Activar cliente">
+                                    <i class="fas fa-unlock"></i>
+                                </button>
+                                <button class="btn-eliminar btn-action btn-delete" type="button"
+                                    title="Eliminar cliente">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </section>
 </body>
 

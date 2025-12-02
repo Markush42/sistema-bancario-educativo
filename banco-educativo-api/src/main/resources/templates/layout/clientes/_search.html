@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <section th:fragment="searchBar">
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="search-input" class="search-input"
+                    placeholder="Buscar por nombre, apellido o documento...">
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">
+                    <i class="fas fa-filter"></i>
+                    Filtrar por estado:
+                </label>
+                <select id="filter-estado" class="filter-select">
+                    <option value="">Todos</option>
+                    <option value="ACTIVO">Activos</option>
+                    <option value="BLOQUEADO">Bloqueados</option>
+                </select>
+            </div>
+
+            <button id="btn-nuevo-cliente" class="btn btn-primary btn-icon">
+                <i class="fas fa-plus"></i>
+                Nuevo Cliente
+            </button>
+        </div>
+    </section>
+</body>
+
+</html>

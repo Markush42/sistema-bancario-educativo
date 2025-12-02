@@ -3,78 +3,149 @@
 
 <body>
     <section th:fragment="formularioCliente(clienteForm)">
-        <h2>Formulario de Cliente</h2>
         <form id="cliente-form" th:object="${clienteForm}">
-            <!-- id solo para edición (no forma parte de ClienteRequestDto) -->
             <input type="hidden" id="id" th:field="*{id}" />
 
-            <div class="form-group">
-                <label for="tipoPersona">Tipo de Persona <span class="required">*</span></label>
-                <select id="tipoPersona" name="tipoPersona" class="form-control" required>
-                    <option value="">Seleccione...</option>
-                    <option value="FISICA">Física</option>
-                    <option value="JURIDICA">Jurídica</option>
-                </select>
+            <!-- Sección: Información Personal -->
+            <div class="form-section-group">
+                <h3 class="form-section-title">
+                    <i class="fas fa-user-circle"></i>
+                    Información Personal
+                </h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tipoPersona">
+                            <i class="fas fa-users"></i>
+                            Tipo de Persona <span class="required">*</span>
+                        </label>
+                        <select id="tipoPersona" name="tipoPersona" class="form-control" required>
+                            <option value="">Seleccione...</option>
+                            <option value="FISICA">Física</option>
+                            <option value="JURIDICA">Jurídica</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estado">
+                            <i class="fas fa-toggle-on"></i>
+                            Estado <span class="required">*</span>
+                        </label>
+                        <select id="estado" name="estado" class="form-control" required>
+                            <option value="ACTIVO" selected>Activo</option>
+                            <option value="BLOQUEADO">Bloqueado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">
+                            <i class="fas fa-signature"></i>
+                            Nombre <span class="required">*</span>
+                        </label>
+                        <input id="nombre" th:field="*{nombre}" type="text" class="form-control" required
+                            maxlength="100" placeholder="Ingrese el nombre">
+                        <span class="error-message" id="error-nombre"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellido">
+                            <i class="fas fa-signature"></i>
+                            Apellido <span class="required">*</span>
+                        </label>
+                        <input id="apellido" th:field="*{apellido}" type="text" class="form-control" required
+                            maxlength="100" placeholder="Ingrese el apellido">
+                        <span class="error-message" id="error-apellido"></span>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="nombre">Nombre <span class="required">*</span></label>
-                <input id="nombre" th:field="*{nombre}" type="text" class="form-control" required maxlength="100" />
-                <span class="error-message" id="error-nombre"></span>
+            <!-- Sección: Documentación -->
+            <div class="form-section-group">
+                <h3 class="form-section-title">
+                    <i class="fas fa-id-card"></i>
+                    Documentación
+                </h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tipoDocumento">
+                            <i class="fas fa-id-card-alt"></i>
+                            Tipo de Documento <span class="required">*</span>
+                        </label>
+                        <select id="tipoDocumento" name="tipoDocumento" class="form-control" required>
+                            <option value="">Seleccione...</option>
+                            <option value="DNI" selected>DNI</option>
+                            <option value="CUIT">CUIT</option>
+                            <option value="CUIL">CUIL</option>
+                            <option value="PASAPORTE">Pasaporte</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dni">
+                            <i class="fas fa-fingerprint"></i>
+                            Número de Documento <span class="required">*</span>
+                        </label>
+                        <input id="dni" th:field="*{dni}" type="text" class="form-control" required maxlength="20"
+                            placeholder="Ej: 12345678">
+                        <span class="error-message" id="error-dni"></span>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="apellido">Apellido <span class="required">*</span></label>
-                <input id="apellido" th:field="*{apellido}" type="text" class="form-control" required maxlength="100" />
-                <span class="error-message" id="error-apellido"></span>
+            <!-- Sección: Información de Contacto -->
+            <div class="form-section-group">
+                <h3 class="form-section-title">
+                    <i class="fas fa-address-book"></i>
+                    Información de Contacto
+                </h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i>
+                            Email
+                        </label>
+                        <input id="email" name="email" type="email" class="form-control" maxlength="150"
+                            placeholder="ejemplo@correo.com">
+                        <span class="error-message" id="error-email"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">
+                            <i class="fas fa-phone"></i>
+                            Teléfono
+                        </label>
+                        <input id="telefono" name="telefono" type="text" class="form-control" maxlength="20"
+                            placeholder="Ej: +54 9 11 1234-5678">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="direccion">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Dirección
+                    </label>
+                    <input id="direccion" name="direccion" type="text" class="form-control" maxlength="255"
+                        placeholder="Calle, número, ciudad">
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="tipoDocumento">Tipo de Documento <span class="required">*</span></label>
-                <select id="tipoDocumento" name="tipoDocumento" class="form-control" required>
-                    <option value="">Seleccione...</option>
-                    <option value="DNI" selected>DNI</option>
-                    <option value="CUIT">CUIT</option>
-                    <option value="CUIL">CUIL</option>
-                    <option value="PASAPORTE">Pasaporte</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="dni">Número de Documento <span class="required">*</span></label>
-                <input id="dni" th:field="*{dni}" type="text" class="form-control" required maxlength="20" />
-                <span class="error-message" id="error-dni"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input id="email" name="email" type="email" class="form-control" maxlength="150" />
-                <span class="error-message" id="error-email"></span>
-            </div>
-
-            <div class="form-group">
-                <label for="telefono">Teléfono</label>
-                <input id="telefono" name="telefono" type="text" class="form-control" maxlength="20" />
-            </div>
-
-            <div class="form-group">
-                <label for="direccion">Dirección</label>
-                <input id="direccion" name="direccion" type="text" class="form-control" maxlength="255" />
-            </div>
-
-            <div class="form-group">
-                <label for="estado">Estado <span class="required">*</span></label>
-                <select id="estado" name="estado" class="form-control" required>
-                    <option value="ACTIVO" selected>Activo</option>
-                    <option value="BLOQUEADO">Bloqueado</option>
-                </select>
-            </div>
-
+            <!-- Contenedor de alertas -->
             <div id="alert-container"></div>
 
+            <!-- Botones de acción -->
             <div class="form-actions">
-                <button id="btn-guardar" class="btn btn-primary btn-block" type="button">Guardar</button>
-                <button id="btn-limpiar" class="btn btn-secondary btn-block" type="button">Limpiar</button>
+                <button id="btn-guardar" class="btn btn-primary btn-icon" type="button">
+                    <i class="fas fa-save"></i>
+                    Guardar Cliente
+                </button>
+                <button id="btn-limpiar" class="btn btn-secondary btn-icon" type="button">
+                    <i class="fas fa-eraser"></i>
+                    Limpiar Formulario
+                </button>
             </div>
         </form>
     </section>
