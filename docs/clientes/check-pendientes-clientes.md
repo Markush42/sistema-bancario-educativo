@@ -1,258 +1,104 @@
-Actualización del Módulo de Clientes - Sistema Bancario Educativo
-📋 Resumen Ejecutivo
-Se realizó un análisis completo del módulo de gestión de clientes y se implementaron mejoras significativas para resolver inconsistencias entre backend y frontend, agregar funcionalidad faltante y mejorar la experiencia de usuario.
-
-🔴 Problemas Identificados
-Críticos
-
-Inconsistencia DTOs: El formulario HTML solo manejaba 3 campos (nombre, apellido, dni) pero el endpoint PUT esperaba ClienteUpdateRequestDto con 9 campos
-Funcionalidad incompleta: Existía endpoint de bloqueo pero no de activación
-Clases CSS desalineadas: HTML usaba btn-editar pero CSS definía btn-edit
-Sin manejo de errores: No había feedback visual de errores de validación
-
-Menores
-
-Validaciones inconsistentes entre DTOs
-Falta de confirmaciones en acciones destructivas
-Sin scroll automático al editar
-Alertas con alert() nativo en lugar de componentes visuales
-
-
-✅ Cambios Implementados
-Backend
-[MODIFY] ClienteRestController.java
-Agregado endpoint de activación:
-java@PostMapping("/{id}/activar")
-public ResponseEntity<BloqueoClienteResponseDto> activarCliente(@PathVariable Long id)
-Razón: Permite reactivar clientes bloqueados, completando el ciclo de gestión de estados.
-[MODIFY] ClienteService.java
-Implementado método activarCliente:
-
-Sigue el mismo patrón que bloquearCliente
-Retorna BloqueoClienteResponseDto con estado anterior y nuevo
-Transaccional para garantizar consistencia
-
-
-Frontend - HTML
-[MODIFY] _form.html
-Campos agregados:
-
-tipoPersona (select: FISICA/JURIDICA)
-tipoDocumento (select: DNI/CUIT/CUIL/PASAPORTE)
-email (input email con validación)
-telefono (input text)
-direccion (input text)
-estado (select: ACTIVO/BLOQUEADO)
-
-Mejoras de UX:
-
-Campos requeridos marcados con asterisco rojo
-Atributos maxlength para prevenir excesos
-Contenedor #alert-container para mensajes
-Spans .error-message para validación por campo
-Clases form-control para estilos consistentes
-
-[MODIFY] _tabla.html
-Badges de estado:
-html<span th:class="${cliente.estado == 'ACTIVO' ? 'badge badge-activo' : 'badge badge-bloqueado'}" 
-      th:text="${cliente.estado}"></span>
-Botones condicionales:
-
-btn-bloquear: Solo visible si estado == ACTIVO
-btn-activar: Solo visible si estado == BLOQUEADO
-Clases alineadas con CSS (.btn-editar, .btn-eliminar)
-
-
-Frontend - JavaScript
-[MODIFY] clientes.js
-Nuevas funciones de manejo de errores:
-
-mostrarAlerta(mensaje, tipo): Alertas visuales con auto-dismiss
-limpiarErrores(): Limpia mensajes y clases de error
-mostrarErrorCampo(campo, mensaje): Feedback por campo específico
-
-Payload inteligente:
-javascriptfunction construirPayloadCliente() {
-  // Creación: usa ClienteRequestDto (3 campos)
-  if (!id) {
-    return {
-      payload: { nombre, apellido, dni },
-      id: ""
-    };
-  }
-  
-  // Actualización: usa ClienteUpdateRequestDto (9 campos)
-  return {
-    payload: {
-      tipoPersona, nombre, apellido,
-      tipoDocumento, numeroDocumento,
-      email, telefono, direccion, estado
-    },
-    id
-  };
-}
-Nuevas funciones:
-
-bloquearCliente(id): POST a /api/clientes/{id}/bloquear
-activarCliente(id): POST a /api/clientes/{id}/activar
-
-Mejoras de UX:
-
-Confirmaciones con window.confirm() antes de acciones destructivas
-Scroll suave al formulario al editar: form.scrollIntoView({ behavior: "smooth" })
-Mensajes de éxito con delay antes de reload
-Parseo de errores de validación del backend
+# 🚀 Update: Refactorización y Mejoras al Módulo de Clientes
 
+**Fecha:** 02 de Diciembre, 2025  
+**Contexto:** Sistema Bancario Educativo  
+**Módulo:** Gestión de Clientes (Frontend & Backend)
 
-Frontend - CSS
-[MODIFY] clientes.css
-Estilos agregados:
-css/* Título de sección */
-h2 {
-  font-size: 1.5rem;
-  border-bottom: 2px solid var(--border-color);
-}
+---
 
-/* Botón de éxito (activar) */
-.btn-action.btn-success {
-  color: var(--success-color);
-}
+## 📋 Resumen Ejecutivo
+Se realizó una reingeniería del módulo de gestión de clientes para alinear la comunicación entre el Backend y el Frontend. El objetivo principal fue resolver inconsistencias en los DTOs, implementar el ciclo de vida completo del cliente (Bloqueo/Activación) y mejorar sustancialmente la experiencia de usuario (UX) mediante feedback visual y validaciones.
 
-/* Selects con flecha custom */
-select.form-control {
-  appearance: none;
-  background-image: url("data:image/svg+xml,...");
-  padding-right: 2.5rem;
-}
+---
 
-/* Asterisco requerido */
-.required {
-  color: var(--danger-color);
-  font-weight: 700;
-}
+## 🛠 Problemas Resueltos
 
-/* Acciones del formulario */
-.form-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-}
+### 🔴 Críticos (Bloqueantes)
+1.  **Inconsistencia de DTOs:** El formulario de edición solo enviaba 3 campos (`nombre`, `apellido`, `dni`), pero el endpoint `PUT` esperaba un `ClienteUpdateRequestDto` con 9 campos, provocando errores de nulidad o datos incompletos.
+2.  **Ciclo de vida incompleto:** Existía la funcionalidad para **Bloquear**, pero no para **Activar** nuevamente a un cliente.
+3.  **Desalineación CSS/HTML:** Botones con clases erróneas (ej. `btn-editar` en HTML vs `btn-edit` en CSS).
+4.  **Ausencia de Feedback:** El usuario no recibía notificaciones visuales ante errores de validación.
 
-🏗️ Arquitectura de Decisiones
-¿Por qué dos DTOs diferentes?
-ClienteRequestDto (creación):
+### 🟡 Menores (UX/UI)
+* Falta de confirmación en acciones destructivas.
+* Ausencia de scroll automático al editar un registro.
+* Uso de `alert()` nativo en lugar de notificaciones integradas en la UI.
 
-Minimalista: solo nombre, apellido, dni
-Valores por defecto en el mapper (tipoPersona=FISICA, tipoDocumento=DNI)
-Simplifica onboarding de clientes
+---
 
-ClienteUpdateRequestDto (actualización):
+## 💻 Cambios Implementados
 
-Completo: todos los campos editables
-Permite cambiar tipo de documento, email, dirección, estado
-Validación de unicidad de documento si cambia
+### ☕ Backend (Java/Spring Boot)
 
-¿Por qué no usar un solo DTO?
-Opción descartada: Un único DTO con campos opcionales
-Razones:
+**`ClienteRestController.java`**
+* ✅ **Nuevo Endpoint:** Se agregó `@PostMapping("/{id}/activar")` para permitir la reactivación de clientes bloqueados.
 
-Viola el principio de segregación de interfaces (ISP)
-Confunde al cliente de la API sobre qué campos son realmente necesarios
-Dificulta validaciones específicas por contexto
+**`ClienteService.java`**
+* ✅ **Lógica de Negocio:** Implementado método `activarCliente` (transaccional), retornando el estado actualizado mediante `BloqueoClienteResponseDto`.
 
-Patrón de bloqueo/activación
-Alternativa considerada: Un solo endpoint /api/clientes/{id}/estado con body { estado: "ACTIVO" | "BLOQUEADO" }
-Razones para endpoints separados:
+### 🎨 Frontend (HTML/Thymeleaf)
 
-Más RESTful y semántico
-Permite auditoría específica por acción
-Evita errores de typo en el enum
-Facilita permisos granulares (RBAC futuro)
+**`_form.html`**
+* **Campos Agregados:** Se expandió el formulario para soportar la edición completa:
+    * `tipoPersona` (Física/Jurídica)
+    * `tipoDocumento`, `email`, `telefono`, `direccion`, `estado`.
+* **Validación Visual:** Indicadores de campos requeridos (`*`) y atributos `maxlength`.
 
+**`_tabla.html`**
+* **Badges Dinámicos:** El estado ahora se visualiza con colores semánticos (Verde/Rojo).
+* **Botones Condicionales:**
+    * Si estado es `ACTIVO` → Muestra botón "Bloquear".
+    * Si estado es `BLOQUEADO` → Muestra botón "Activar".
 
-🧪 Validación y Testing
-Flujos a probar
-1. Creación de cliente
+### ⚡ Frontend (JavaScript - `clientes.js`)
 
-Formulario vacío → llenar solo nombre, apellido, dni → Guardar
-Verificar que se crea con defaults (FISICA, DNI, ACTIVO)
+**Payload Inteligente**
+Se implementó una lógica para distinguir entre creación y edición:
+* **Creación:** Envía payload reducido (Nombre, Apellido, DNI).
+* **Edición:** Envía payload completo (9 campos) coincidiendo con `ClienteUpdateRequestDto`.
 
-2. Actualización completa
+**Mejoras de UX**
+* `mostrarAlerta(mensaje, tipo)`: Sistema de notificaciones no intrusivo.
+* `window.confirm()`: Confirmación de seguridad antes de bloquear/eliminar.
+* **Scroll Suave:** Al hacer clic en editar, la pantalla se desplaza automáticamente al formulario.
 
-Editar cliente existente
-Cambiar email, teléfono, dirección
-Verificar que se actualizan todos los campos
+### 🎨 Estilos (`clientes.css`)
+* Selectores personalizados con flechas SVG.
+* Estilos para estados de éxito/error.
+* Alineación visual de botones de acción.
 
-3. Bloqueo y activación
+---
 
-Cliente ACTIVO → Bloquear → verificar badge rojo
-Cliente BLOQUEADO → Activar → verificar badge verde
-Verificar que botones cambian dinámicamente
+## 🏗 Arquitectura de Decisiones
 
-4. Validación de errores
+### ¿Por qué dos DTOs diferentes?
+Se decidió mantener dos objetos de transferencia de datos separados para respetar el principio de **Segregación de Interfaces (ISP)**:
 
-Intentar crear cliente con DNI duplicado
-Verificar mensaje de error visual
-Intentar guardar con email inválido
+1.  **`ClienteRequestDto` (Creación):** Minimalista. Facilita el *onboarding* rápido requiriendo solo datos esenciales. El backend asume defaults (Tipo Física, DNI).
+2.  **`ClienteUpdateRequestDto` (Actualización):** Completo. Permite la modificación granular de todos los datos de contacto y estado.
 
-5. Eliminación
+### Endpoint Separado para Estado
+En lugar de un `PATCH` genérico, se crearon endpoints explícitos `/bloquear` y `/activar`.
+* **Razón:** Mayor semántica RESTful, facilita la auditoría futura por tipo de acción y previene errores de tipado manual en el estado.
 
-Eliminar cliente
-Verificar confirmación
-Verificar que fila desaparece sin reload
+---
 
+## 🧪 Guía de Testing Manual
 
-⚠️ Deuda Técnica Pendiente
+Para verificar la integridad de este update, realizar el siguiente flujo:
 
-WARNING: Los siguientes items quedaron fuera del scope pero deberían considerarse:
+1.  **Creación:** Registrar un cliente solo con Nombre, Apellido y DNI. Verificar que se guarde como "ACTIVO".
+2.  **Edición:** Seleccionar el cliente creado. Completar email, dirección y teléfono. Guardar y verificar persistencia.
+3.  **Ciclo de Estado:**
+    * Click en "Bloquear" → Verificar Badge Rojo.
+    * Click en "Activar" → Verificar Badge Verde.
+4.  **Validación:** Intentar crear un cliente con un DNI ya existente y verificar que aparezca la alerta roja en la UI.
 
+---
 
-Manejo de excepciones global: Implementar @ControllerAdvice para respuestas de error consistentes
-Paginación en frontend: La tabla muestra todos los clientes, debería paginar
-Búsqueda y filtros: No hay forma de buscar clientes por nombre/documento
-Validación de CUIT/CUIL: Solo valida longitud, no formato ni dígito verificador
-Internacionalización: Mensajes hardcodeados en español
-Loading states: No hay spinners durante requests async
+## ⚠️ Deuda Técnica Pendiente (Roadmap)
 
-
-🚀 Próximos Pasos Recomendados
-1. Testing automatizado
-
-Tests unitarios para ClienteService.activarCliente()
-Tests de integración para endpoints nuevos
-Tests E2E con Selenium/Playwright
-
-2. Documentación OpenAPI
-
-Agregar @Operation y @ApiResponse a endpoints
-Generar Swagger UI
-
-3. Mejoras de seguridad
-
-Implementar Spring Security
-Agregar validación de permisos por rol
-Rate limiting en endpoints públicos
-
-4. Optimizaciones
-
-Implementar cache con Redis para listarClientes
-Lazy loading de tabla con scroll infinito
-Debounce en búsqueda
-
-
-📚 Conclusión
-El módulo de clientes ha sido actualizado exitosamente para resolver inconsistencias críticas entre backend y frontend. Los cambios implementados mejoran significativamente la experiencia de usuario y establecen una base sólida para futuras expansiones del sistema.
-Logros principales:
-
-✅ Alineación completa entre DTOs y formularios
-✅ Ciclo de vida completo de estados (activación/bloqueo)
-✅ Mejoras sustanciales en UX con validaciones visuales
-✅ Arquitectura clara y mantenible con separación de responsabilidades
-
-Próximos focos:
-
-🎯 Testing automatizado para garantizar estabilidad
-🎯 Mejoras de performance con paginación y caching
-🎯 Seguridad y control de acceso basado en roles
-
-El proyecto está ahora en una posición mucho más robusta para escalar y agregar nuevas funcionalidades del sistema bancario educativo.
+* [ ] Implementar **Paginación** en la tabla de clientes (actualmente lista todos).
+* [ ] Agregar **Buscador/Filtros** por DNI o Apellido.
+* [ ] Validación estricta de formato CUIT/CUIL (dígito verificador).
+* [ ] Internacionalización (i18n) de mensajes de error.

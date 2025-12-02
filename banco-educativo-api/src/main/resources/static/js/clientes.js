@@ -5,7 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("cliente-form");
   const btnGuardar = document.getElementById("btn-guardar");
   const btnLimpiar = document.getElementById("btn-limpiar");
+  const btnNuevoCliente = document.getElementById("btn-nuevo-cliente");
   const alertContainer = document.getElementById("alert-container");
+  const searchInput = document.getElementById("search-input");
+  const filterEstado = document.getElementById("filter-estado");
+  const formTitle = document.getElementById("form-title");
 
   const configDiv = document.getElementById("app-config");
   const apiClientesUrl = configDiv ? configDiv.dataset.apiClientesUrl : null;
@@ -75,6 +79,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (alertContainer) {
       alertContainer.innerHTML = "";
     }
+    if (formTitle) {
+      formTitle.textContent = "Nuevo Cliente";
+    }
   }
 
   function llenarFormularioDesdeDto(dto) {
@@ -103,6 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (estadoInput) estadoInput.value = dto.estado ?? "ACTIVO";
 
     limpiarErrores();
+
+    if (formTitle) {
+      formTitle.textContent = "Editar Cliente";
+    }
   }
 
   function construirPayloadCliente() {
@@ -388,4 +399,88 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // --- Búsqueda en tiempo real ---
+  if (searchInput && tablaClientes) {
+    searchInput.addEventListener("input", (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const rows = tablaClientes.querySelectorAll("tbody tr");
+
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+
+      actualizarEstadisticas();
+    });
+  }
+
+  // --- Filtro por estado ---
+  if (filterEstado && tablaClientes) {
+    filterEstado.addEventListener("change", (e) => {
+      const estadoFiltro = e.target.value;
+      const rows = tablaClientes.querySelectorAll("tbody tr");
+
+      rows.forEach(row => {
+        if (!estadoFiltro) {
+          row.style.display = "";
+        } else {
+          const badge = row.querySelector(".badge");
+          const estadoTexto = badge ? badge.textContent.trim() : "";
+
+          if (estadoTexto === estadoFiltro) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        }
+      });
+
+      actualizarEstadisticas();
+    });
+  }
+
+  // --- Botón nuevo cliente ---
+  if (btnNuevoCliente) {
+    btnNuevoCliente.addEventListener("click", () => {
+      limpiarFormulario();
+      const formSection = document.querySelector(".form-section");
+      if (formSection) {
+        formSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
+
+  // --- Actualizar estadísticas ---
+  function actualizarEstadisticas() {
+    if (!tablaClientes) return;
+
+    const rows = Array.from(tablaClientes.querySelectorAll("tbody tr"));
+    const visibleRows = rows.filter(row => row.style.display !== "none");
+
+    const total = visibleRows.length;
+    const activos = visibleRows.filter(row => {
+      const badge = row.querySelector(".badge-activo");
+      return badge !== null;
+    }).length;
+    const bloqueados = visibleRows.filter(row => {
+      const badge = row.querySelector(".badge-bloqueado");
+      return badge !== null;
+    }).length;
+
+    const statTotal = document.getElementById("stat-total");
+    const statActivos = document.getElementById("stat-activos");
+    const statBloqueados = document.getElementById("stat-bloqueados");
+
+    if (statTotal) statTotal.textContent = total;
+    if (statActivos) statActivos.textContent = activos;
+    if (statBloqueados) statBloqueados.textContent = bloqueados;
+  }
+
+  // Inicializar estadísticas al cargar
+  actualizarEstadisticas();
 });
